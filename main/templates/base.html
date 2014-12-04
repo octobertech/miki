@@ -1,0 +1,150 @@
+<!DOCTYPE html>
+<html lang="{{ LANGUAGE_CODE }}">
+{% load pages_tags mezzanine_tags i18n future staticfiles %}
+<head>
+
+<meta http-equiv="Content-type" content="text/html; charset=utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="keywords" content="{% block meta_keywords %}{% endblock %}">
+<meta name="description" content="{% block meta_description %}{% endblock %}">
+<title>{% block meta_title %}{% endblock %}{% if settings.SITE_TITLE %} | {{ settings.SITE_TITLE }}{% endif %}</title>
+<link rel="shortcut icon" href="{{ STATIC_URL }}img/favicon.ico">
+
+{% compress css %}
+<link href="http://netdna.bootstrapcdn.com/bootswatch/3.1.1/journal/bootstrap.min.css" rel="stylesheet">
+<link rel="stylesheet" href="{{ STATIC_URL }}css/mezzanine.css">
+<link rel="stylesheet" href="{{ STATIC_URL }}css/bootstrap-responsive.css">
+<link rel="stylesheet" href="{{ STATIC_URL }}css/drum.css">
+<link href='http://fonts.googleapis.com/css?family=Open+Sans&subset=latin,cyrillic' rel='stylesheet' type='text/css'>
+<link href="//maxcdn.bootstrapcdn.com/font-awesome/4.2.0/css/font-awesome.min.css" rel="stylesheet">
+{% endcompress %}
+
+<style>
+</style>
+
+{% compress js %}
+<script src="{{ STATIC_URL }}mezzanine/js/{{ settings.JQUERY_FILENAME }}"></script>
+<script src="{{ STATIC_URL }}js/bootstrap.js"></script>
+<script src="{{ STATIC_URL }}js/bootstrap-extras.js"></script>
+<script src="{{ STATIC_URL }}js/drum.js"></script>
+<script src="{{ STATIC_URL }}js/jquery.pjax.js"></script>
+
+{% endcompress %}
+
+{% block extra_head %}{% endblock %}
+
+</head>
+<body>
+
+    <nav class="navbar navbar-default navbar-fixed-top" role="navigation">
+    <div class="container">
+    <div class="navbar-header">
+    <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#navbar-collapse">
+        <span class="sr-only">{% trans "Toggle Navigation" %}</span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+    </button>
+    
+    {% if settings.SITE_TITLE %}<a class="navbar-brand" href="/">{{ settings.SITE_TITLE }}</a>{% endif %}
+    
+    </div>
+	<div class="navbar-collapse collapse" id="navbar-collapse">
+    <div class="row">
+    <div class="col-md-3 navbar-left">
+	{% search_form "main.Link" %}
+    </div>
+    <div class="col-md-7 navbar-right">
+	<ul class="nav navbar-nav" role="navigation">
+        {% url "link_list_latest" as link_list_latest %}
+        {% url "comment_list_latest" as comment_list_latest %}
+        {% url "comment_list_best" as comment_list_best %}
+        {% url "home" as home %}
+		<li{% if request.path == home %} class="active"{% endif %}><a href="{{ home }}">Home</a></li>
+        <li{% if request.path == link_list_latest %} class="active"{% endif %}><a href="{{ link_list_latest }}">Latest</a></li>
+		<li class="{% if request.path == comment_list_latest %}active{% endif %} dropdown"><a href="{{ comment_list_latest }}" 
+		class="dropdown-toggle disabled" data-toggle="dropdown">Comments <b class="caret"></b></a>
+		    <ul class="dropdown-menu" data-no-collapse="true">
+                <li{% if request.path == comment_list_best %} class="active"{% endif %}><a href="{{ comment_list_best }}">Best</a></li>
+		    </ul>
+		</li>
+    </ul>
+    
+    <ul class="nav navbar-nav navbar-right">
+	<li><form action="{% url "link_create" %}">
+	{% csrf_token %}
+	<button class="btn no-pjax" style="margin-top: 10px;">New miki</button></form></li>
+	
+	{% nevercache %}
+    {% include "accounts/includes/user_panel_nav.html" %}
+    {% endnevercache %}
+    </ul>
+    </div>
+	</div>	
+    </div>
+</div>
+</nav>
+
+<div class="container main">
+{% nevercache %}
+{% for message in messages %}
+<div class="alert alert-{{ message.tags }}" data-alert="alert">
+    <a class="close" href="#" onclick="$(this).parent().fadeOut('fast'); return false;">×</a>{{ message }}
+</div>
+{% endfor %}
+{% endnevercache %}
+<h1>{% block title %}{% endblock %}</h1>
+{% url "home" as home %}
+{% if request.path == home %}
+<h2>Find, learn and share knowledge in 140 characters. <span style="font-size: 18px;"><a href="/about">Learn more</a></span></h2><br>
+{% endif %}
+</div>
+
+<div class="container">
+<div class="row">
+<div class="col-md-9">
+    {% block main %}{% endblock %}
+</div>
+<div class="col-md-3">
+    {% block left_panel %}
+    <div class="panel panel-default tree">{% page_menu "pages/menus/tree.html" %}</div>
+    {% endblock %}
+    <div class="panel panel-default">
+    <div class="panel-body">
+    {% block right_panel %}
+    {% ifinstalled mezzanine.twitter %}
+    {% include "twitter/tweets.html" %}
+    {% endifinstalled %}
+    {% endblock %}
+    </div>
+    </div>
+    
+</div>
+</div>
+</div>
+
+<footer>
+
+<div class="container">
+<div class="row">
+<div class="col-md-12">
+
+{% page_menu "pages/menus/footer.html" %}
+</div>
+</div>
+</div>
+<div class="container">
+<div class="row">
+<div class="col-md-12">
+<p class="site-info text-center" style="font-size: 16px; margin: 8px;">
+    The Miki Beta. <br><br>
+    Made by <a href="/users/atai">Atai Kang</a>.<br><br>
+    © Miki App 2013, 2014, 2015.
+</p>
+</div>
+</div>
+</div>
+</footer>
+
+</body>
+</html>

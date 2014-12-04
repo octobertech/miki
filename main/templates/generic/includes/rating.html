@@ -1,0 +1,33 @@
+{% load mezzanine_tags rating_tags i18n future %}
+
+<div class="rating pull-right">
+
+    <form method="post" action="{% url "rating" %}">{% csrf_token %}
+        {% fields_for rating_form %}
+    </form>
+	
+    {% if rated or rating_obj.user == request.user %}
+    <span class="arrows">
+    <span class="score" >
+        {{ rating_sum }}
+    </span>
+    </span>
+    {% else %}
+    <span class="arrows">
+        <a href="#"><i class="glyphicon glyphicon-chevron-up"></i></a>
+		<span class="score">
+        {% with rating_obj.comments_count|default:0 as comments_count %}
+        <!--{{ rating_sum|add:comments_count }}-->
+        {{ rating_sum }}
+        {% endwith %}
+        </span>
+		{% if request.user.is_staff %}
+        <a href="#"><i class="glyphicon glyphicon-chevron-down" style="margin-left: -1px"></i></a>
+		{% endif %}
+    </span>
+    {% endif %}
+
+    
+
+</div>
+

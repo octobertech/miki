@@ -1,0 +1,32 @@
+{% extends "base.html" %}
+
+{% load mezzanine_tags rating_tags comment_tags drum_tags future %}
+
+{% block meta_description %}{% metablock %}{{ object.description }}{% endmetablock %}{% endblock %}
+{% block meta_title %}{{ object.title }}{% endblock %}
+{% block title %}
+<a href="#">{{ object.title }}</a>
+{% endblock %}
+
+{% block main %}
+<div class="link-view">
+    <p class="description">{{ object.body|urlize }}</p>
+	{% if object.link %}
+	<p class="link">Link: <a href="{{ object.link }}" target="_blank">{{ object.link }}</a></p>
+	{% endif %}
+    <div class="link-meta">
+        {% rating_for object %}
+        <p>by <a href="{% url "profile" object.user.username %}">{{ object.user.profile }}</a>
+        {{ object.publish_date|short_timesince }} ago    
+        <span class="pull-right" style="margin-right: 20px;">share on: 
+{% set_short_url_for object %}
+<a class="btn btn-sm" target="_blank" href="http://twitter.com/home?status={{ object.title|urlencode }}%20-%20{{ object.description|urlencode }}%20{{ object.short_url|urlencode }}%20via%20@mikiapp"><i class="fa fa-twitter"></i></a>
+<a class="btn btn-sm" target="_blank" href="http://facebook.com/sharer.php?u={{ object.short_url|urlencode }}&amp;t={{ object.title|urlencode }}"><i class="fa fa-facebook"></i></a>
+         </span>
+        </p>
+    </div>
+
+    {% order_comments_by_score_for object %}
+    {% comments_for object %}
+</div>
+{% endblock %}

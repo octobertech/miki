@@ -1,0 +1,35 @@
+{% extends "base.html" %}
+{% load i18n future mezzanine_tags %}
+
+{% block meta_title %}{{ profile_user.username }}{% endblock %}
+{% block title %}{{ profile_user.first_name }} {{ profile_user.last_name }}<br><span class="text-muted" style="font-size:18px;margin-top:5px;">@{{ profile_user.profile }}</span>{% endblock %}
+{% block body_id %}account{% endblock %}
+
+{% block main %}
+{% if profile_user == request.user %}
+<div class="pull-right">
+    <a class="btn btn-large btn-default btn-profile" href="{% url "profile_update" %}">Update profile</a>
+</div>
+{% endif %}
+<div class="clearfix">
+
+    {% with profile_user.profile as profile %}
+	{% if profile.first_name %}
+	{% if profile.last_name %}
+	<p class="bio">{{ profile.first_name }} {{ profile.last_name }}</p>
+    {% endif %}	
+	{% endif %}	
+    {% if profile.bio %}
+    <p class="bio">{{ profile.bio|urlize|linebreaks }}</p>
+    {% endif %}
+    {% if profile.website %}
+    <p class="bio">Website: <a href="{{ profile.website }}" target="_blank">{{ profile.website }}</a></p>
+    {% endif %}
+	<p class="bio"><abbr title="Karma is a personal rank on the platform which is collected when other users upvote the comments or campaigns of the user and used to identify the most active users.">Karma</abbr>: {{ profile.karma }}  |
+    {% endwith %}
+
+    <a href="{% url "comment_list_user" profile_user.username %}">comments ({{ profile_user.comment_comments.count }})</a> |
+    <a href="{% url "link_list_user" profile_user.username %}">campaigns ({{ profile_user.links.published.count }})</a> </p>
+
+</div>
+{% endblock %}

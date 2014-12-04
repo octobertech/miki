@@ -1,0 +1,59 @@
+{% extends "base.html" %}
+
+{% load i18n future mezzanine_tags pages_tags staticfiles rating_tags drum_tags %}
+
+{% block meta_title %}{% trans "Search Results" %}{% endblock %}
+{% block title %}{% trans "Search Results" %}{% endblock %}
+{% block extra_head %}
+<meta name="robots" content="noindex">
+{% endblock %}
+
+{% block breadcrumb_menu %}
+<li>
+    <a href="{% url "home" %}">{% trans "Home" %}</a>
+</li>
+<li class="active">{% trans "Search Results" %}</li>
+{% endblock %}
+
+{% block main %}
+
+{% if results.paginator.count == 0 %}
+<p>
+{% blocktrans %}
+No results were found matching your query: {{ query }}
+{% endblocktrans %}
+{% else %}
+{% blocktrans with start=results.start_index end=results.end_index total=results.paginator.count %}
+Showing {{ start }} to {{ end }} of {{ total }} results matching your query: {{ query }}
+{% endblocktrans %}
+{% endif %}
+</p>
+
+<div id="search-results">
+    {% for result in results.object_list %}
+    <div class="link-item clearfix">
+    {% rating_for result %}
+    <div class="link-detail{% if result.rating_sum < 0 %} link-negative{% endif %}">
+    <h2 style="margin-top: -5px; margin-bottom: 5px;">
+        <a href="{{ result.get_absolute_url }}" >{{ result.title }}</a>
+    </h2>
+    <p>{{ result.body }}</p>
+    <div class="link-meta">
+    <p>by <a class="profile" href="{% url "profile" result.user.username %}">{{ result.user.profile }}</a>
+        {{ result.publish_date|short_timesince }} ago |
+        <a class="comments" href="{{ result.get_absolute_url }}">{{ result.comments_count }} comment{{ result.comments_count|pluralize }} </a> 
+        <span class="pull-right" style="margin-right: 20px;">share on: 
+{% set_short_url_for result %}
+<a class="btn btn-sm" target="_blank" href="http://twitter.com/home?status={{ result.title|urlencode }}%20-%20{{ result.description|urlencode }}%20{{ result.short_url|urlencode }}%20via%20@mikiapp"><i class="fa fa-twitter"></i></a>
+<a class="btn btn-sm" target="_blank" href="http://facebook.com/sharer.php?u={{ result.short_url|urlencode }}&amp;t={{ result.title|urlencode }}"><i class="fa fa-facebook"></i></a>
+        </span>
+    </p>
+    </div>
+    </div>
+    </div>
+    {% endfor %}
+</div>
+
+{% pagination_for results %}
+
+{% endblock %}

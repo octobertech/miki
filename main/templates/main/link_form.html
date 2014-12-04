@@ -1,0 +1,18 @@
+{% extends "base.html" %}
+
+{% block meta_title %}New miki{% endblock %}
+{% block title %}New miki{% endblock %}
+
+{% load mezzanine_tags %}
+
+{% block main %}
+
+<form method="post">{% csrf_token %}
+<fieldset>{% fields_for form %}</fieldset>
+
+<div class="actions">
+    <input class="btn no-pjax" type="submit" value="Miki">
+</div>
+
+</form>
+{% endblock %}

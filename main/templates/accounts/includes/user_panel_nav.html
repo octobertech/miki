@@ -1,0 +1,31 @@
+{% load i18n future mezzanine_tags %}
+
+<li class="dropdown">
+{% if request.user.is_authenticated %}
+    {% url "profile" request.user.username as profile_url %}
+    {% if not profile_url %}{% url "profile_update" as profile_url %}{% endif %}
+    <a href="{{ profile_url }}" data-toggle="dropdown" class="dropdown-toggle disabled">
+		{{ request.user.profile }} <b class="caret"></b></a>
+    <ul class="dropdown-menu" data-no-collapse="true">
+	    <li><a href="{{ profile_url }}">My profile</a><li>
+	    <li><a href="/accounts/update">Update profile</a></li>
+        <li><a href="{% url "logout" %}?next={{ request.path }}"
+        class="">{% trans "Log out" %}</a></li>
+	</ul>
+	
+{% else %}
+    <a href="{% url "login" %}?next={{ request.path }}" data-toggle="dropdown" class="dropdown-toggle">
+		{% trans "Log in" %} <b class="caret"></b></a>
+	<ul class="dropdown-menu">
+	    <li><a href="{% url "login" %}?next={{ request.path }}"
+        class="">{% trans "Log in" %}</a></li>
+		<li><a href="{% url "signup" %}?next={{ request.path }}"
+        class="">{% trans "Sign up" %}</a></li>
+	</ul>
+	
+{% endif %}
+</li>
+
+
+
+
