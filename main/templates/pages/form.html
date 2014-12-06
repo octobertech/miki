@@ -17,7 +17,7 @@
 
     {% errors_for form %}
 
-    <form class="mezzanine-form" method="post"{% if form.is_multipart %} enctype="multipart/form-data"{% endif %}>
+    <form class="mezzanine-form" method="post"{% if form.is_multipart %} enctype="multipart/form-data"{% endif %}>{% csrf_token %}
         {% fields_for form %}
         <div class="form-actions">
             <input class="btn btn-default btn-lg" type="submit" value="{{ page.form.button_text }}">

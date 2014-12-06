@@ -79,7 +79,7 @@ footer {background: none; }
   margin-top: 0;
 }
 
-.link-detail {width:85%;}
+.link-detail {width:80%; padding-left: 5px;}
 @media (max-width: 600px) {.link-detail {width:80%;}}
 .link-detail a.profile, .link-detail a.comments {color:#999;}
 .link-detail a.profile:visited, .link-detail a.comments:visited {color:#bbb;}
