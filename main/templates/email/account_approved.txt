@@ -1,0 +1,6 @@
+{% load i18n future %}
+{% block main %}
+{% trans "Hi" %} {{ user.first_name }}! {% trans "Congratulations! Your Miki account has been activated." %}
+{% trans "Please use the link below to log in." %}
+http://{{ request.get_host }}{% url "login" %}
+{% endblock %}
