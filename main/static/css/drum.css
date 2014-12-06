@@ -33,7 +33,7 @@ footer {background: none; }
 .link-item, .comment-item, .comment-links, #comments h3 {
     border:0 solid rgba(0,0,0,.02);
 }
-.link-item, .comment-item, .comment-links {background-color: #fff; border-bottom-width:3px;}
+.link-item, .comment-item, .comment-links {background-color: #fff; border-bottom-width:3px; padding-left: 5px;}
 #comments h3 {border-top-width:5px;}
 
 /* Rating widget with up/down arrows */
