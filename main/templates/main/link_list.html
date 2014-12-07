@@ -14,10 +14,10 @@
     {% with profile_user.profile as profile %}
     {% if profile_user.first_name %}
     {% if profile_user.last_name %}
-    <p class="bio">{{ profile_user.first_name }} {{ profile_user.last_name }}</p>
+    <h2>{{ profile_user.first_name }} {{ profile_user.last_name }}</h2>
     {% endif %} 
     {% endif %} 
-    <p class="text-muted">@{{ profile_user.username }}</p>
+    <h3 class="text-muted">@{{ profile_user.username }}</h3>
     {% if profile.bio %}
     <p class="bio">{{ profile.bio|urlize|linebreaks }}</p>
     {% endif %}
