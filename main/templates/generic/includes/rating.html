@@ -6,7 +6,7 @@
         {% fields_for rating_form %}
     </form>
 	
-    {% if rated or rating_obj.user == request.user %}
+    {% if not request.user.is_staff %}
     <span class="arrows">
     <span class="score" >
         {{ rating_sum }}
@@ -21,13 +21,9 @@
         {{ rating_sum }}
         {% endwith %}
         </span>
-		{% if request.user.is_staff %}
-        <a href="#"><i class="glyphicon glyphicon-chevron-down" style="margin-left: -1px"></i></a>
-		{% endif %}
+        <a href="#"><i class="glyphicon glyphicon-chevron-down"></i></a>
     </span>
     {% endif %}
-
-    
 
 </div>
 
