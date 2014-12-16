@@ -24,6 +24,7 @@ class Link(Displayable, Ownable):
     link = models.URLField(blank=True)
     rating = RatingField()
     comments = CommentsField()
+    #keywords= KeywordsField()
 
     @models.permalink
     def get_absolute_url(self):

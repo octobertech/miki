@@ -33,7 +33,7 @@ footer {background: none; }
 .link-item, .comment-item, .comment-links, #comments h3 {
     border:0 solid rgba(0,0,0,.02);
 }
-.link-item, .comment-item, .comment-links {background-color: #fff; border-bottom-width:3px; padding-left: 5px;}
+.link-item, .comment-item, .comment-links {background-color: #fff; border-bottom-width:3px;}
 #comments h3 {border-top-width:5px;}
 
 /* Rating widget with up/down arrows */
@@ -80,7 +80,7 @@ footer {background: none; }
 }
 
 .link-detail {width:80%; padding-left: 5px;}
-@media (max-width: 600px) {.link-detail {width:80%;}}
+@media (max-width: 600px) {.link-detail {width:75%;}}
 .link-detail a.profile, .link-detail a.comments {color:#999;}
 .link-detail a.profile:visited, .link-detail a.comments:visited {color:#bbb;}
 
@@ -286,3 +286,16 @@ a {
 .page-body {background-color: #FFF;}
 
 .sharing {margin-right: 10px;}
+
+.keywords {
+  color: #A1A1A1;
+  margin-left: 30px; 
+  font-size: 14px;
+  font-family: 'Open Sans', sans-serif;
+  font-weight: 200;
+}
+
+.miki-title {color: #333; margin-top: -5px; margin-bottom: 5px;}
+.miki-title a {color: #333; }
+
+.link-item {padding-left: 10px; border-radius: 3px;}

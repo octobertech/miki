@@ -1,6 +1,6 @@
 {% extends "base.html" %}
 
-{% load pages_tags mezzanine_tags rating_tags drum_tags future %}
+{% load pages_tags mezzanine_tags rating_tags keyword_tags drum_tags future %}
 
 {% block meta_title %}{% url "link_list_user" as link_list_user %}{% if request.path == link_list_user %}{% else %}{{ title|default:"Home" }}{% endif %}{% endblock %}
 {% block title %}{% if profile_user %}{% else %}{{ title }}{% endif %}{% endblock %}
@@ -14,7 +14,7 @@
     {% with profile_user.profile as profile %}
     {% if profile_user.first_name %}
     {% if profile_user.last_name %}
-    <h2>{{ profile_user.first_name }} {{ profile_user.last_name }}</h2>
+    <h1>{{ profile_user.first_name }} {{ profile_user.last_name }}</h1>
     {% endif %} 
     {% endif %} 
     <h3 class="text-muted">@{{ profile_user.username }}</h3>
@@ -24,7 +24,7 @@
     {% if profile.website %}
     <p class="bio">Website: <a href="{{ profile.website }}" target="_blank">{{ profile.website }}</a></p>
     {% endif %}
-    <p class="bio">Mikis ({{ profile_user.links.published.count }})  |  Comments ({{ profile_user.comment_comments.count }})  |  <abbr title="Karma is a personal rank on the platform which is collected when other users upvote the comments or campaigns of the user and used to identify the best users that then will be rewarded.">Karma</abbr>: {{ profile.karma }}</p>
+    <p class="bio">Mikis: {{ profile_user.links.published.count }}  |  Comments: {{ profile_user.comment_comments.count }}  |  <abbr title="Karma is a personal rank on the platform which is collected when other users upvote the comments or campaigns of the user and used to identify the best users that then will be rewarded.">Karma</abbr>: {{ profile.karma }}</p>
     <p class="bio text-muted">Member since {{ profile_user.date_joined|date:"d M Y" }}</p>
     {% endwith %}
 
@@ -40,14 +40,21 @@
 <div class="link-item clearfix">
     {% rating_for link %}
     <div class="link-detail{% if link.rating_sum < 0 %} link-negative{% endif %}">
-        <h2 style="margin-top: -5px; margin-bottom: 5px;">
-            <a href="{{ link.get_absolute_url }}" >{{ link.title }} <i class="fa fa-twitter-sign"></i></a>
+        <h2 class="miki-title">
+            <a href="{{ link.get_absolute_url }}" style="color: #333">{{ link.title }}</a> 
+            <span class="keywords">
+            {% keywords_for link as keywords %}
+            {% for keyword in keywords %}
+            {% if not forloop.first %} {% endif %}
+            #{{ keyword }}
+            {% endfor %}
+            </span>
         </h2>
         <p>{{ link.body }}</p>
         <div class="link-meta">
         <p>by <a href="{% url "profile" link.user.username %}">{{ link.user.profile }}</a> <span class="text-muted"> in {{ link.body|length }} chars  {{ link.publish_date|short_timesince }} ago /</span>
         <a class="comments" href="{{ link.get_absolute_url }}">{{ link.comments_count }} comment{{ link.comments_count|pluralize }}</a>  
-        <span class="pull-right sharing">share on: 
+        <span class="pull-right sharing">share: 
 {% set_short_url_for link %}
 <a class="btn-sm" target="_blank" href="http://twitter.com/home?status={{ link.title|urlencode }}%20-%20{{ link.description|urlencode }}%20{{ link.short_url|urlencode }}%20via%20@mikiapp"><i class="fa fa-twitter"></i></a>
 <a class="btn-sm" target="_blank" href="http://facebook.com/sharer.php?u={{ link.short_url|urlencode }}&amp;t={{ link.title|urlencode }}"><i class="fa fa-facebook"></i></a>

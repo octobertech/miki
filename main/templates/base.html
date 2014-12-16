@@ -4,7 +4,7 @@
 <head>
 
 <meta http-equiv="Content-type" content="text/html; charset=utf-8">
-<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no">
 <meta name="keywords" content="{% block meta_keywords %}{% endblock %}">
 <meta name="description" content="{% block meta_description %}{% endblock %}">
 <title>{% block meta_title %}{% endblock %}{% if settings.SITE_TITLE %} | {{ settings.SITE_TITLE }}{% endif %}</title>
@@ -13,7 +13,6 @@
 <link href="http://netdna.bootstrapcdn.com/bootswatch/3.1.1/journal/bootstrap.min.css" rel="stylesheet">
 {% compress css %}
 <link rel="stylesheet" href="{{ STATIC_URL }}css/mezzanine.css">
-<link rel="stylesheet" href="{{ STATIC_URL }}css/bootstrap-responsive.css">
 <link rel="stylesheet" href="{{ STATIC_URL }}css/drum.css">
 {% endcompress %}
 <link href='http://fonts.googleapis.com/css?family=Open+Sans&subset=latin,cyrillic' rel='stylesheet' type='text/css'>
@@ -24,11 +23,11 @@
 {% compress js %}
 <script src="{{ STATIC_URL }}mezzanine/js/{{ settings.JQUERY_FILENAME }}"></script>
 <script src="{{ STATIC_URL }}js/bootstrap.js"></script>
-<script src="{{ STATIC_URL }}js/bootstrap-extras.js"></script>
 <script src="{{ STATIC_URL }}js/drum.js"></script>
 <script src="{{ STATIC_URL }}js/jquery.pjax.js"></script>
 
 {% endcompress %}
+
 
 {% block extra_head %}{% endblock %}
 
@@ -59,12 +58,12 @@
         {% url "comment_list_latest" as comment_list_latest %}
         {% url "comment_list_best" as comment_list_best %}
         {% url "home" as home %}
-		<li{% if request.path == home %} class="active"{% endif %}><a href="{{ home }}">Home</a></li>
-        <li{% if request.path == link_list_latest %} class="active"{% endif %}><a href="{{ link_list_latest }}">Latest</a></li>
+		<li{% if request.path == home %} class="active"{% endif %}><a href="{{ home }}"><i class="fa fa-home"></i> Home</a></li>
+        <li{% if request.path == link_list_latest %} class="active"{% endif %}><a href="{{ link_list_latest }}"><i class="fa fa-angle-double-up"></i> Latest</a></li>
 		<li class="{% if request.path == comment_list_latest %}active{% endif %} dropdown"><a href="{{ comment_list_latest }}" 
-		class="dropdown-toggle disabled" data-toggle="dropdown">Comments <b class="caret"></b></a>
+		class="dropdown-toggle disabled" data-toggle="dropdown"><i class="fa fa-comments-o"></i> Comments<b class="caret"></b></a>
 		    <ul class="dropdown-menu" data-no-collapse="true">
-                <li{% if request.path == comment_list_best %} class="active"{% endif %}><a href="{{ comment_list_best }}">Best</a></li>
+                <li{% if request.path == comment_list_best %} class="active"{% endif %}><a href="{{ comment_list_best }}"><i class="fa fa-star-o"></i> Best</a></li>
 		    </ul>
 		</li>
     </ul>
@@ -72,7 +71,7 @@
     <ul class="nav navbar-nav navbar-right">
 	<li><form action="{% url "link_create" %}">
 	{% csrf_token %}
-	<button class="btn no-pjax" style="margin-top: 10px;">New miki</button></form></li>
+	<button class="btn no-pjax" style="margin-top: 10px;"><i class="fa fa-pencil-square-o"></i> New miki</button></form></li>
 	
 	{% nevercache %}
     {% include "accounts/includes/user_panel_nav.html" %}
@@ -104,7 +103,7 @@
 <div class="col-md-9">
     {% block main %}{% endblock %}
 </div>
-<div class="col-md-3">
+<div class="col-md-3 hidden-xs">
     {% block left_panel %}
     <div class="panel panel-default tree">{% page_menu "pages/menus/tree.html" %}</div>
     {% endblock %}
@@ -145,7 +144,11 @@
 </div>
 </div>
 </footer>
-
+<script>
+$(document).on('click','.navbar-collapse.in', function() {
+        $(this).collapse('hide');   }
+});
+</script>
 <script>!function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0],p=/^http:/.test(d.location)?'http':'https';if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src=p+"://platform.twitter.com/widgets.js";fjs.parentNode.insertBefore(js,fjs);}}(document,"script","twitter-wjs");</script>
 <script>
   (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){

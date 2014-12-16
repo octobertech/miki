@@ -1,6 +1,6 @@
 {% extends "base.html" %}
 
-{% load i18n future mezzanine_tags pages_tags staticfiles rating_tags drum_tags %}
+{% load i18n future mezzanine_tags pages_tags keyword_tags staticfiles rating_tags drum_tags %}
 
 {% block meta_title %}{% trans "Search Results" %}{% endblock %}
 {% block title %}{% trans "Search Results" %}{% endblock %}
@@ -34,14 +34,21 @@ Showing {{ start }} to {{ end }} of {{ total }} results matching your query: {{ 
     <div class="link-item clearfix">
     {% rating_for result %}
     <div class="link-detail{% if result.rating_sum < 0 %} link-negative{% endif %}">
-    <h2 style="margin-top: -5px; margin-bottom: 5px;">
-        <a href="{{ result.get_absolute_url }}" >{{ result.title }}</a>
+    <h2 style="miki-title">
+        <a href="{{ result.get_absolute_url }}" style="color: #333">{{ result.title }}</a>
+            <span class="keywords">
+            {% keywords_for result as keywords %}
+            {% for keyword in keywords %}
+            {% if not forloop.first %} {% endif %}
+            #{{ keyword }}
+            {% endfor %}
+            </span>
     </h2>
     <p>{{ result.body }}</p>
     <div class="link-meta">
     <p>by <a href="{% url "profile" result.user.username %}">{{ result.user.profile }}</a> <span class="text-muted"> in {{ result.body|length }} chars  {{ result.publish_date|short_timesince }} ago /</span>
         <a class="comments" href="{{ result.get_absolute_url }}">{{ result.comments_count }} comment{{ result.comments_count|pluralize }}</a>  
-        <span class="pull-right sharing">share on: 
+        <span class="pull-right sharing">share: 
 {% set_short_url_for result %}
 <a class="btn-sm" target="_blank" href="http://twitter.com/home?status={{ result.title|urlencode }}%20-%20{{ result.description|urlencode }}%20{{ result.short_url|urlencode }}%20via%20@mikiapp"><i class="fa fa-twitter"></i></a>
 <a class="btn-sm" target="_blank" href="http://facebook.com/sharer.php?u={{ result.short_url|urlencode }}&amp;t={{ result.title|urlencode }}"><i class="fa fa-facebook"></i></a>

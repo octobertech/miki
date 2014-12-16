@@ -7,16 +7,16 @@ from main.models import Link
 
 class LinkAdmin(DisplayableAdmin):
 
-    list_display = ("id", "title", "link", "description", "status", "publish_date",
+    list_display = ("id", "title", "body", "keywords", "description",  "status", "publish_date",
                     "user", "comments_count", "rating_sum")
     list_display_links = ("id",)
-    list_editable = ("title", "link", "description", "status")
-    list_filter = ("status", "user__username")
+    list_editable = ("title", "body", "description", "status")
+    list_filter = ("status", "user__username", "keywords",)
     ordering = ("-publish_date",)
 
     fieldsets = (
         (None, {
-            "fields": ("title", "link", "status", "publish_date", "user"),
+            "fields": ("title", "body", "keywords", "link", "status", "publish_date", "user"),
         }),
     )
 
