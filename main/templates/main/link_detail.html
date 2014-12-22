@@ -20,8 +20,8 @@
         <a class="comments" href="{{ object.get_absolute_url }}">{{ object.comments_count }} comment{{ object.comments_count|pluralize }}</a>  
         <span class="pull-right sharing">share on: 
 {% set_short_url_for object %}
-<a class="btn btn-sm" target="_blank" href="http://twitter.com/home?status={{ object.title|urlencode }}%20-%20{{ object.description|urlencode }}%20{{ object.short_url|urlencode }}%20via%20@mikiapp"><i class="fa fa-twitter"></i></a>
-<a class="btn btn-sm" target="_blank" href="http://facebook.com/sharer.php?u={{ object.short_url|urlencode }}&amp;t={{ object.title|urlencode }}"><i class="fa fa-facebook"></i></a>
+<a class="btn-sm" target="_blank" href="http://twitter.com/home?status={{ object.title|urlencode }}%20-%20{{ object.description|urlencode }}%20{{ object.short_url|urlencode }}%20via%20@mikiapp"><i class="fa fa-twitter"></i></a>
+<a class="btn-sm" target="_blank" href="http://facebook.com/sharer.php?u={{ object.short_url|urlencode }}&amp;t={{ object.title|urlencode }}"><i class="fa fa-facebook"></i></a>
         </span>
         </p>
     </div>
