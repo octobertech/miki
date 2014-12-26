@@ -5,11 +5,11 @@
 {% block meta_description %}{% metablock %}{{ object.description }}{% endmetablock %}{% endblock %}
 {% block meta_title %}{{ object.title }}{% endblock %}
 {% block title %}
-<a href="#" style="color: #333">{{ object.title }}</a>
+<a href="#"><span style="color: #333; background-color: #fff">{{ object.title }}</span></a>
 {% endblock %}
 
 {% block main %}
-<div class="link-view">
+<div class="link-view" style="background-color: #fff">
     <p class="description">{{ object.body|urlize }}</p>
 	{% if object.link %}
 	<p class="link">Link: <a href="{{ object.link }}" target="_blank">{{ object.link }}</a></p>

@@ -7,3 +7,5 @@ pillow
 psycopg2
 
 South
+
+djangorestframework

@@ -145,7 +145,41 @@
 </div>
 </footer>
 
+
 <script>!function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0],p=/^http:/.test(d.location)?'http':'https';if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src=p+"://platform.twitter.com/widgets.js";fjs.parentNode.insertBefore(js,fjs);}}(document,"script","twitter-wjs");
+</script>
+<script>
+counter = function() {
+    var value = $('#id_body').val();
+
+    if (value.length == 0) {
+        $('#wordCount').html(0);
+        $('#totalChars').html(0);
+        return;
+    }
+
+    var regex = /\s+/gi;
+    var wordCount = value.trim().replace(regex, ' ').split(' ').length;
+    var totalChars = value.length;
+
+    $('#wordCount').html(wordCount);
+    $('#totalChars').html(totalChars);
+};
+
+$(document).ready(function() {
+    $('#count').click(counter);
+    $('#id_body').change(counter);
+    $('#id_body').keydown(counter);
+    $('#id_body').keypress(counter);
+    $('#id_body').keyup(counter);
+    $('#id_body').blur(counter);
+    $('#id_body').focus(counter);
+});
+</script>
+<script>
+$(document).on('click','.navbar-collapse.in', function() {
+        $(this).collapse('hide');   }
+});
 </script>
 <script>
   (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){

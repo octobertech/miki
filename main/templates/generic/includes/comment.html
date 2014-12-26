@@ -2,11 +2,11 @@
 
 <ul class="unstyled comment-thread">
     {% for comment in comments_for_thread %}
-    <li id="comment-{{ comment.id }}">
+    <li id="comment-{{ comment.id }} comment-item" style="background-color: #fff">
     {% if not comment.is_removed and comment.is_public %}
 
         <p class="comment-meta">
-            <a href="{% url "profile" comment.user.username %}" title="The number in bracket's is the user's karma. It increases when their links or comments are upvoted.">
+            <a href="{% url "profile" comment.user.username %}" >
 			{{ comment.user.profile }}</a>
             {{ comment.submit_date|short_timesince }} ago
         </p>
@@ -14,11 +14,12 @@
 
         <div class="comment-links">
             {% rating_for comment %}
-            <a href="{{ request.path }}#comment-{{ comment.id }}">link</a> |
-            <a href="#reply-{{ comment.id }}" class="reply no-pjax">reply</a>
+            <a href="{{ request.path }}#comment-{{ comment.id }}"><span class="glyphicon glyphicon-link"></span> link</a> |
+            <a href="#reply-{{ comment.id }}" class="reply no-pjax"><span class="glyphicon glyphicon-share-alt"></span> reply</a>
             <form class="reply-form" method="post" id="reply-{{ comment.id }}"
                 action="{{ comment_url }}#reply-{{ comment.id }}"
                 {% if replied_to != comment.id %}style="display:none;"{% endif %}>
+                {% csrf_token %}
                 {% if replied_to == comment.id %}
                 {% fields_for posted_comment_form %}
                 {% else %}

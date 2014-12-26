@@ -15,8 +15,7 @@ from django.dispatch import receiver
 
 from mezzanine.core.models import Displayable, Ownable
 from mezzanine.generic.models import Rating
-from mezzanine.generic.fields import RatingField, CommentsField#, KeywordsField
-
+from mezzanine.generic.fields import RatingField, CommentsField
 
 class Link(Displayable, Ownable):
 
@@ -24,7 +23,6 @@ class Link(Displayable, Ownable):
     link = models.URLField(blank=True)
     rating = RatingField()
     comments = CommentsField()
-    #keywords= KeywordsField()
 
     @models.permalink
     def get_absolute_url(self):
