@@ -10,10 +10,14 @@
 <p>Hint: in Title write what miki is about (limit - 50 chars), and in Body the actual miki (limit - 200 chars, including links). E.g. Title: Miki  ,  Body: Everyone's micro wiki etc...</p>
 <form method="post">{% csrf_token %}
 <fieldset>{% fields_for form %}</fieldset>
-
+<div id="result">
+<p>Words: <span id="wordCount">0</span> | 
+Total characters: <span id="totalChars">0</span></p>
+</div>
 <div class="actions">
     <input class="btn no-pjax" type="submit" value="Miki">
 </div>
 
 </form>
+
 {% endblock %}

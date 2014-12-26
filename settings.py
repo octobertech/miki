@@ -251,6 +251,8 @@ INSTALLED_APPS = (
     "mezzanine.galleries",
     #"mezzanine.twitter",
     #"mezzanine.mobile",
+    "rest_framework",
+    "api",
 )
 
 # List of processors used by RequestContext to populate the context.
@@ -324,7 +326,7 @@ ACCOUNTS_PROFILE_VIEWS_ENABLED = True
 ACCOUNTS_PROFILE_FORM_EXCLUDE_FIELDS = (
 )
 
-ACCOUNTS_VERIFICATION_REQUIRED = True 
+ACCOUNTS_VERIFICATION_REQUIRED = True
 ACCOUNTS_APPROVAL_REQUIRED = False
 
 

@@ -145,6 +145,34 @@
 </div>
 </footer>
 <script>
+counter = function() {
+    var value = $('#id_body').val();
+
+    if (value.length == 0) {
+        $('#wordCount').html(0);
+        $('#totalChars').html(0);
+        return;
+    }
+
+    var regex = /\s+/gi;
+    var wordCount = value.trim().replace(regex, ' ').split(' ').length;
+    var totalChars = value.length;
+
+    $('#wordCount').html(wordCount);
+    $('#totalChars').html(totalChars);
+};
+
+$(document).ready(function() {
+    $('#count').click(counter);
+    $('#id_body').change(counter);
+    $('#id_body').keydown(counter);
+    $('#id_body').keypress(counter);
+    $('#id_body').keyup(counter);
+    $('#id_body').blur(counter);
+    $('#id_body').focus(counter);
+});
+</script>
+<script>
 $(document).on('click','.navbar-collapse.in', function() {
         $(this).collapse('hide');   }
 });
