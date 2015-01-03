@@ -40,7 +40,7 @@ class Profile(models.Model):
     website = models.URLField(blank=True)
     bio = models.TextField(blank=True)
     karma = models.IntegerField(default=0, editable=False)
-    #follows = models.ManyToManyField('self', related_name='followed_by', symmetrical=False)
+    follows = models.ManyToManyField('self', related_name='followed_by', symmetrical=False)
 
 
     def __unicode__(self):

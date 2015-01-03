@@ -1,0 +1,101 @@
+{% extends "base.html" %}
+{% load pages_tags mezzanine_tags rating_tags keyword_tags drum_tags i18n future staticfiles %}
+{% load url from future %}
+{% block meta_title %}{{ user.username }}{% endblock %}
+{% block title %}{% endblock %}
+
+{% block main %}
+
+<div class="profile text-center">  
+{% if user.get_full_name %}<h3>{{ user.first_name }} {{ user.last_name}}<p></p>{% else %}<h3>{% endif %}
+<span class="text-muted">@{{ user.username }}</span></h3>
+<p>{{ user.profile.bio|urlize|linebreaks }}</p>
+<p><a href="{{ user.profile.website }}" target="_blank">{{ user.profile.website }}</a></p>
+<p class="text-muted">member since {{ user.date_joined|date:"d b Y" }}</p>
+<p class="text-muted">{{ user_miki_count }} mikis  |  {{ user.profile.follows.count }} following  |  {{ user.profile.followed_by.count }} followers  |  {{ user.profile.karma }} karma</p>
+
+					  <p>
+					  {% if follow %}
+                      <form action="/follow/" method="post">
+                      {% csrf_token %}
+                      <input type="hidden" name="follow" value="{{ user.id }}">
+                      <button type="submit" class="btn">follow</button>
+                      </form>
+            {% endif %}
+            {% if following %}
+                      <form action="/unfollow/" method="post">
+                      {% csrf_token %}
+                      <input type="hidden" name="follow" value="{{ user.id }}">
+                      <button type="submit" class="btn">unfollow</button>
+                      </form>
+            {% endif %}
+            {% if user == request.user %}
+            <a class="btn btn-default" href="{% url "profile_update" %}">Update profile</a>
+            {% endif %}
+
+					  </p>
+</div>
+        <br><br>
+
+          {% for link in mikis %}
+<div class="link-item clearfix">
+    {% rating_for link %}
+    <div class="link-detail{% if link.rating_sum < 0 %} link-negative{% endif %}">
+        <h2 class="miki-title">
+            <a href="{{ link.get_absolute_url }}" style="color: #333">{{ link.title }}</a> 
+            <span class="keywords">
+            {% keywords_for link as keywords %}
+            {% for keyword in keywords %}
+            {% if not forloop.first %} {% endif %}
+            #{{ keyword }}
+            {% endfor %}
+            </span>
+        </h2>
+        <p>{{ link.body|urlize }}</p>
+        <div class="link-meta">
+        <p>by <a href="{% url "profile" link.user.username %}" data-toggle="tooltip" data-placement="bottom" title="{{ link.user.first_name }} {{ link.user.last_name }}">{{ link.user.profile }}</a> <span class="text-muted"> in {{ link.body|length }} chars  {{ link.publish_date|short_timesince }} ago /</span>
+        <a class="comments" href="{{ link.get_absolute_url }}">{{ link.comments_count }} comment{{ link.comments_count|pluralize }}</a> 
+        {% if link.user.id == request.user.id %}
+        <span class="pull-right"><a class="text-muted" href="{% url "link_delete" link.id %}" data-toggle="tooltip" data-placement="bottom" title="Delete"> <small><i class="fa fa-times"></i></small></a></span>
+        {% endif %} 
+        <span class="pull-right sharing"> 
+{% set_short_url_for link %}
+<a class="btn-sm" target="_blank" href="http://twitter.com/home?status={{ link.title|urlencode }}%20-%20{{ link.description|urlencode }}%20{{ link.short_url|urlencode }}%20via%20@mikiapp" data-toggle="tooltip" data-placement="bottom" title="Share on Twitter"><i class="fa fa-twitter"></i></a>
+<a class="btn-sm" target="_blank" href="http://facebook.com/sharer.php?u={{ link.short_url|urlencode }}&amp;t={{ link.title|urlencode }}" data-toggle="tooltip" data-placement="bottom" title="Share on Facebook"><i class="fa fa-facebook"></i> </a>
+        </span>
+
+        
+
+        </p>
+    </div>
+    </div>
+</div>
+{% empty %}
+<p>{% if user == request.user %}You don't have any mikis for now. <a href="{% url "link_create" %}" class="no-pjax">Create some...</a>{% else %}@{{ user.username }} doesn't have any mikis for now.{% endif %}</p>
+{% endfor %}
+
+{% pagination_for mikis "page" "pjax" %}
+
+  
+{% endblock %}
+
+{% block left_panel %}
+{% if request.user.is_authenticated %}
+<div class="well">
+        <h4>compose miki:</h4>
+        <form action="{% url "link_create" %}" method="POST" class="input-group">
+            {% csrf_token %}
+     
+        <div class="input-group">
+        <input type="text" name="title" maxlength="30" class="form-control" placeholder="Title (max-length: 50 chars)"/><br><br>
+                <textarea maxlength="200" name="body" type="text" class="input-group-lg form-control" rows="3" placeholder="Body (max-length: 200 chars)"></textarea>   
+        </div>
+            <input type="hidden" value="{{ next_url }}" name="next_url">
+            <button type="submit"class="btn">post</button>
+          
+        </form>
+</div>
+{% else %}
+
+{% endif %}
+{% endblock %}

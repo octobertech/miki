@@ -1,0 +1,117 @@
+{% extends "base.html" %}
+{% load pages_tags mezzanine_tags rating_tags keyword_tags drum_tags future %}
+{% block meta_title %}{{ title|default:"Discover" }}{% endblock %}
+{% block title %}{% endblock %}
+
+{% block main %}
+        <ul class="nav nav-tabs nav-justified">
+        {% url "link_list_latest" as link_list_latest %}
+        {% url "home" as home %}
+        {% url "users" as users %}
+        <li{% if request.path == home %} class="active"{% endif %}><a href="{{ home }}"><i class="fa fa-star-o"></i> Top</a></li>
+        <li{% if request.path == link_list_latest %} class="active"{% endif %}><a href="{{ link_list_latest }}"><i class="fa fa-angle-double-up"></i> Latest</a></li>
+        <li{% if request.path == users %} class="active"{% endif %}><a href="{{ users }}"><i class="fa fa-user"></i> Users</a></li>
+    </ul>
+    <br><br>
+    <h2 style="margin-top: -10px;">Find who is already miking:</h2>
+		<div class="input-group">
+		<form method="GET" class="input-group" action="/discover/users/">
+      <div class="input-group">
+            <input type="text" name="q" class="form-control" placeholder="enter name or username" size="80"/>
+            <span class="input-group-btn">
+			      <input type="submit" value="search user" class="btn btn-primary"/>
+            </span>
+      </div>
+    </form>
+		</div><br>
+		{% if searched %}
+		<table class="mikis table table-bordered table-hover">
+          {% for user in found_entries %}
+            <tbody>
+              <tr>
+                <td>
+                  <div class="media">
+				            <div class="media-body">
+                      <h4 class="media-heading"><a class="pull-left" href="/users/{{ user.username }}" style="color: #333">{{ user.first_name }} {{ user.last_name}} <span class="text-muted">@{{ user.username }}</span></a></h4><br>
+                      <p style="color: #444;">{{ user.profile.bio }}</p>
+                      <p class="text-muted"><small>joined {{ user.date_joined|short_timesince }} ago <span class="pull-right">{{ user.miki_count }} mikis  |  {{ user.profile.followed_by.count }} followers  |  {{ user.profile.karma }} karma</span></small></p>
+                    </div>
+                  </div>
+                </td>
+              </tr>
+            </tbody>
+          {% empty %}
+            <tbody>
+              <tr>
+                <td>
+                  <div class="media">
+                    <div class="media-body">
+                      <h4 class="media-heading">There are no users "{{ query_string }}".</h4>
+                    </div>
+                  </div>
+                </td>
+              </tr>
+            </tbody>
+          {% endfor %}
+
+		</table>
+		{% else %}
+        <h3>top users</h3><br>
+
+          <table class="mikis table table-bordered table-hover">
+          {% for user in found_entries %}
+            <tbody>
+              <tr>
+                <td>
+                  <div class="media">
+                    <div class="media-body">
+                      <h4 class="media-heading"><a class="pull-left" href="/users/{{ user.username }}" style="color: #333">{{ user.first_name }} {{ user.last_name}} <span class="text-muted">@{{ user.username }}</span></a></h4>
+					  <br>
+                      <p style="color: #666;">{{ user.profile.bio }}</p>
+                      <p class="text-muted"><small>joined {{ user.date_joined|short_timesince }} ago
+                      <span style="color: #999;" class="pull-right">{{ user.miki_count }} mikis  |  {{ user.profile.followed_by.count }} followers  |  {{ user.profile.karma }} karma</span></small>
+                      </p>
+                    </div>
+                  </div>
+                </td>
+              </tr>
+            </tbody>
+          {% empty %}
+            <tbody>
+              <tr>
+                <td>
+                  <div class="media">
+                    <div class="media-body">
+                      <h4 class="media-heading">There are no users yet. Make sure to become one!</h4>
+                    </div>
+                  </div>
+                </td>
+              </tr>
+            </tbody>
+          {% endfor %}
+
+          </table>
+		  {% endif %}
+
+{% pagination_for found_entries "page" "pjax" %}
+
+{% endblock %}
+
+{% block left_panel %}
+{% if request.user.is_authenticated %}
+<div class="well sidebar-nav hidden-xs">
+        <h4>compose miki:</h4>
+        <form action="/submit" method="POST" class="input-group">
+            {% csrf_token %}
+				<div class="input-group">
+				<input type="text" name="title" maxlength="30" class="form-control" placeholder="Title (max-length: 50 chars)"/><br><br>
+                <textarea maxlength="200" name="body" type="text" class="input-group-lg form-control" rows="3" placeholder="Body (max-length: 200 chars)"></textarea>		
+				</div>
+            <input type="hidden" value="{{ next_url }}" name="next_url">
+            <input type="submit" value="post" class="btn btn-primary">
+   
+        </form>
+</div>
+{% else %}
+{% endif %}
+{% endblock %}

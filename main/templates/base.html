@@ -18,6 +18,9 @@
 <link href='http://fonts.googleapis.com/css?family=Open+Sans&subset=latin,cyrillic' rel='stylesheet' type='text/css'>
 <link href="//maxcdn.bootstrapcdn.com/font-awesome/4.2.0/css/font-awesome.min.css" rel="stylesheet">
 <style>
+.navbar {
+   background-color: rgba(255, 255, 255, 0.9);
+} 
 </style>
 
 {% compress js %}
@@ -44,38 +47,37 @@
         <span class="icon-bar"></span>
     </button>
     
-    {% if settings.SITE_TITLE %}<a class="navbar-brand" href="/">{{ settings.SITE_TITLE }}</a>{% endif %}
+    {% if settings.SITE_TITLE %}<a class="navbar-brand" href="/" >{{ settings.SITE_TITLE }}</a>{% endif %}
     
     </div>
 	<div class="navbar-collapse collapse" id="navbar-collapse">
     <div class="row">
-    <div class="col-md-3 navbar-left">
+    <div class="col-md-4 navbar-left">
 	{% search_form "main.Link" %}
     </div>
     <div class="col-md-7 navbar-right">
 	<ul class="nav navbar-nav" role="navigation">
-        {% url "link_list_latest" as link_list_latest %}
+        
+    </ul>
+    
+    <ul class="nav navbar-nav navbar-right" role="navigation">
+        
+	{% url "link_list_latest" as link_list_latest %}
         {% url "comment_list_latest" as comment_list_latest %}
         {% url "comment_list_best" as comment_list_best %}
         {% url "home" as home %}
-		<li{% if request.path == home %} class="active"{% endif %}><a href="{{ home }}"><i class="fa fa-home"></i> Home</a></li>
-        <li{% if request.path == link_list_latest %} class="active"{% endif %}><a href="{{ link_list_latest }}"><i class="fa fa-angle-double-up"></i> Latest</a></li>
-		<li class="{% if request.path == comment_list_latest %}active{% endif %} dropdown"><a href="{{ comment_list_latest }}" 
-		class="dropdown-toggle disabled" data-toggle="dropdown"><i class="fa fa-comments-o"></i> Comments<b class="caret"></b></a>
-		    <ul class="dropdown-menu" data-no-collapse="true">
-                <li{% if request.path == comment_list_best %} class="active"{% endif %}><a href="{{ comment_list_best }}"><i class="fa fa-star-o"></i> Best</a></li>
-		    </ul>
-		</li>
-    </ul>
-    
-    <ul class="nav navbar-nav navbar-right">
-	<li><form action="{% url "link_create" %}">
-	{% csrf_token %}
-	<button class="btn no-pjax" style="margin-top: 10px;"><i class="fa fa-pencil-square-o"></i> New miki</button></form></li>
-	
+        {% url "timeline" as timeline %}
+        <li{% if request.path == timeline %} class="active"{% endif %}><a href="{{ timeline }}"><i class="fa fa-home"></i> Home</a></li>
+        <li{% if request.path == home or request.path == link_list_latest %} class="active"{% endif %}><a href="{{ home }}"><i class="fa fa-globe"></i> Discover</a></li>
 	{% nevercache %}
     {% include "accounts/includes/user_panel_nav.html" %}
     {% endnevercache %}
+    {% if request.user.is_authenticated %}
+    <li><form action="{% url "link_create" %}">
+    {% csrf_token %}
+    <button class="btn btn-md btn-inverse no-pjax " style="margin-top: 10px; margin-left: 10px;" title="New miki"><i class="fa fa-pencil-square-o fa-lg"></i> New</button></form></li>
+    {% else %}
+    {% endif %}
     </ul>
     </div>
 	</div>	
@@ -92,10 +94,7 @@
 {% endfor %}
 {% endnevercache %}
 <h1>{% block title %}{% endblock %}</h1>
-{% url "home" as home %}
-{% if request.path == home %}
-<h1>Find, learn and share knowledge in 140 characters. <span style="font-size: 22px;"><a href="/about">Learn more</a></span></h1><br>
-{% endif %}
+
 </div>
 
 <div class="container">
@@ -145,37 +144,15 @@
 </div>
 </footer>
 
+<script>
+$(function () {
+  $('[data-toggle="tooltip"]').tooltip()
+})
+</script>
 
 <script>!function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0],p=/^http:/.test(d.location)?'http':'https';if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src=p+"://platform.twitter.com/widgets.js";fjs.parentNode.insertBefore(js,fjs);}}(document,"script","twitter-wjs");
 </script>
-<script>
-counter = function() {
-    var value = $('#id_body').val();
 
-    if (value.length == 0) {
-        $('#wordCount').html(0);
-        $('#totalChars').html(0);
-        return;
-    }
-
-    var regex = /\s+/gi;
-    var wordCount = value.trim().replace(regex, ' ').split(' ').length;
-    var totalChars = value.length;
-
-    $('#wordCount').html(wordCount);
-    $('#totalChars').html(totalChars);
-};
-
-$(document).ready(function() {
-    $('#count').click(counter);
-    $('#id_body').change(counter);
-    $('#id_body').keydown(counter);
-    $('#id_body').keypress(counter);
-    $('#id_body').keyup(counter);
-    $('#id_body').blur(counter);
-    $('#id_body').focus(counter);
-});
-</script>
 <script>
 $(document).on('click','.navbar-collapse.in', function() {
         $(this).collapse('hide');   }

@@ -1,0 +1,82 @@
+{% extends "base.html" %}
+{% block meta_title %}Miki - the social micro encyclopedia{% endblock %}
+{% block title %}{% endblock %}
+{% block main %}
+ <div class="jumbotron">
+              <h1 style="margin-bottom: 5px;"><a href="/about/" style="color: #333">miki</a></h1>
+              <p style="line-height: 1.3; margin-bottom: 10px;">a social micro encyclopedic service that enable everyone to easily find, learn and share knowledge and simple definitions in 140 characters.</p>
+              <p><a href="/about/"><small>learn more</small></a></p>
+</div>
+            <table class="mikis table table-bordered table-hover">
+              <tbody>
+                <tr>
+                  <td>
+                    <div class="media miki">
+                      <div class="media-body">
+                        <h3 class="media-heading"><a href="#" style="color: #222;">miki</a></h3>
+                        <p></p>
+                        <h4 style="color: #444;">the social micro encyclopedia</h4>
+						<h5 style="color: #999; margin-top: 10px;">by <a href="#" >miki</a>   1 hours ago</h5>
+                      </div>
+                    </div>
+                  </td>
+                </tr>
+              </tbody>
+              <tbody>
+                <tr>
+                  <td>
+                    <div class="media miki">
+                      <div class="media-body">
+                        <h3 class="media-heading"><a href="#" style="color: #222;">miki</a></h3>
+                        <h4 style="color: #444;">makes Wiki really simple, social and modern like Twitter.<br></h4>
+						<h5 style="color: #999; margin-top: 10px;">by <a href="#" >miki</a>   3 hours ago</h5>
+                      </div>
+                    </div>
+                  </td>
+                </tr>
+                <tr>
+                  <td>
+                    <div class="media miki">
+                      <div class="media-body">
+                        <h3 class="media-heading"><a href="#" style="color: #222;">miki</a></h3>
+                        <h4 style="color: #444;">put it simply</h4>
+						<h5 style="color: #999; margin-top: 10px;">by <a href="#">miki</a>   8 hours ago</h5>
+                      </div>
+                    </div>
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+
+            <div class="partnership" style="margin-top: 30px;">
+              <h3>In partnership with:</h3>
+              <div class="partnership-logos" style="background-color: #FFF;">
+                <a href="http://datastax.com" target="_blank"><img src="/static/img/datastax_logo.jpg" width="200" height="70"/></a>
+                <a href="http://octobertech.org" target="_blank"><img src="/static/img/OT_logo_med_cut.jpg" width="200" height="100"/></a>
+              </div>
+            </div>
+{% endblock %}
+
+{% block left_panel %}
+            <h1>Log in</h1><p></p>
+            <div class="form-group">
+              <form action="{% url "login" %}" method="POST">
+              {% csrf_token %}
+              <div class="input-group">
+                <input type="text" name="username"  class="form-control" placeholder="username/email"/>
+                <input type="password" name="password"  class="form-control" placeholder="password"/>
+           
+                {% if next %}
+                  <input type="hidden" name="next" value="{{ next }}" />
+                {% endif %}
+                <br>
+              <button type="submit" class="btn">Enter</button>
+              </form>
+            </div>
+            <h4>Don't have an account yet? <a href="/accounts/signup">Sign up</a></h4><br>
+    {% if auth_form.non_field_errors %}
+    <div class="bg-danger">
+    {{ auth_form.non_field_errors }}
+     </div>
+    {% endif %}
+{% endblock %}

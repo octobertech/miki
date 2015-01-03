@@ -1,0 +1,19 @@
+{% extends "base.html" %}
+
+{% load mezzanine_tags rating_tags comment_tags drum_tags future %}
+
+{% block meta_description %}{% metablock %}{{ object.description }}{% endmetablock %}{% endblock %}
+{% block meta_title %}{{ object.title }}{% endblock %}
+{% block title %}
+{% endblock %}
+
+{% block main %}
+{% if object.user.id == request.user.id %}
+<form action="" method="post">{% csrf_token %}
+    <h4>Are you sure you want to delete "{{ object }}"?</h4>
+    <input type="submit" value="Confirm" class="btn" />
+</form>
+{% else %}
+<h4>Sorry, you do not have permission to delete "{{ object }}"</h4>
+{% endif %}
+{% endblock %}

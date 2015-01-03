@@ -2,40 +2,33 @@
 
 {% load pages_tags mezzanine_tags rating_tags keyword_tags drum_tags future %}
 
-{% block meta_title %}{% url "link_list_user" as link_list_user %}{% if request.path == link_list_user %}{% else %}{{ title|default:"Home" }}{% endif %}{% endblock %}
-{% block title %}{% if profile_user %}{% else %}{{ title }}{% endif %}{% endblock %}
+{% block meta_title %}{{ title|default:"Discover" }}{% endblock %}
+{% block title %}{{ title }}{% endblock %}
 
 {% block main %}
 
-
-{% if profile_user %}
-<div class="clearfix text-center">
-
-    {% with profile_user.profile as profile %}
-    {% if profile_user.first_name %}
-    {% if profile_user.last_name %}
-    <h1>{{ profile_user.first_name }} {{ profile_user.last_name }}</h1>
-    {% endif %} 
-    {% endif %} 
-    <h3 class="text-muted">@{{ profile_user.username }}</h3>
-    {% if profile.bio %}
-    <p class="bio">{{ profile.bio|urlize|linebreaks }}</p>
-    {% endif %}
-    {% if profile.website %}
-    <p class="bio">Website: <a href="{{ profile.website }}" target="_blank">{{ profile.website }}</a></p>
-    {% endif %}
-    <p class="bio">Mikis: {{ profile_user.links.published.count }}  |  Comments: {{ profile_user.comment_comments.count }}  |  <abbr title="Karma is a personal rank on the platform which is collected when other users upvote the comments or campaigns of the user and used to identify the best users that then will be rewarded.">Karma</abbr>: {{ profile.karma }}</p>
-    <p class="bio text-muted">Member since {{ profile_user.date_joined|date:"d M Y" }}</p>
-    {% endwith %}
-
-
-</div>
+{% if request.path == home or request.path == link_list_latest or request.path == comment_list_latest %}
+<ul class="nav nav-tabs nav-justified">
+        {% url "link_list_latest" as link_list_latest %}
+        {% url "home" as home %}
+        {% url "users" as users %}
+        <li{% if request.path == home %} class="active"{% endif %}><a href="{{ home }}"><i class="fa fa-star-o"></i> Top</a></li>
+        <li{% if request.path == link_list_latest %} class="active"{% endif %}><a href="{{ link_list_latest }}"><i class="fa fa-angle-double-up"></i> Latest</a></li>
+        <li{% if request.path == users %} class="active"{% endif %}><a href="{{ users }}"><i class="fa fa-user"></i> Users</a></li>
+    </ul>
+{% else %}
 {% endif %}
-{% if profile_user == request.user %}
-<div class="text-center">
-    <a class="btn btn-default" href="{% url "profile_update" %}">Update profile</a>
-</div>
-{% endif %}<br>
+
+
+<p>
+                      {% if follow %}
+                      <form action="/follow/" method="post">
+                      {% csrf_token %}
+                      <input type="hidden" name="follow" value="{{ profile_user.id }}">
+                      <button type="submit" class="btn">follow</button>
+                      </form>
+                      {% endif %}
+                      </p>
 {% for link in object_list %}
 <div class="link-item clearfix">
     {% rating_for link %}
@@ -50,14 +43,17 @@
             {% endfor %}
             </span>
         </h2>
-        <p>{{ link.body }}</p>
+        <p>{{ link.body|urlize }}</p>
         <div class="link-meta">
-        <p>by <a href="{% url "profile" link.user.username %}">{{ link.user.profile }}</a> <span class="text-muted"> in {{ link.body|length }} chars  {{ link.publish_date|short_timesince }} ago /</span>
-        <a class="comments" href="{{ link.get_absolute_url }}">{{ link.comments_count }} comment{{ link.comments_count|pluralize }}</a>  
+        <p>by <a href="{% url "profile" link.user.username %}" data-toggle="tooltip" data-placement="bottom" title="{{ link.user.first_name }} {{ link.user.last_name }}">{{ link.user.profile }}</a> <span class="text-muted"> in {{ link.body|length }} chars  {{ link.publish_date|short_timesince }} ago /</span>
+        <a class="comments" href="{{ link.get_absolute_url }}">{{ link.comments_count }} comment{{ link.comments_count|pluralize }}</a> 
+        {% if link.user.id == request.user.id %}
+        <span class="pull-right"><small><a class="text-muted" href="{% url "link_delete" link.id %}" data-toggle="tooltip" data-placement="bottom" title="Delete"> <small><i class="fa fa-times"></i></small></a></small></span>
+        {% endif %} 
         <span class="pull-right sharing"> 
 {% set_short_url_for link %}
-<a class="btn-sm" target="_blank" href="http://twitter.com/home?status={{ link.title|urlencode }}%20-%20{{ link.description|urlencode }}%20{{ link.short_url|urlencode }}%20via%20@mikiapp"><i class="fa fa-twitter"></i></a>
-<a class="btn-sm" target="_blank" href="http://facebook.com/sharer.php?u={{ link.short_url|urlencode }}&amp;t={{ link.title|urlencode }}"><i class="fa fa-facebook"></i></a>
+<a class="btn-sm" target="_blank" href="http://twitter.com/home?status={{ link.title|urlencode }}%20-%20{{ link.description|urlencode }}%20{{ link.short_url|urlencode }}%20via%20@mikiapp" data-toggle="tooltip" data-placement="bottom" title="Share on Twitter"><i class="fa fa-twitter"></i></a>
+<a class="btn-sm" target="_blank" href="http://facebook.com/sharer.php?u={{ link.short_url|urlencode }}&amp;t={{ link.title|urlencode }}" data-toggle="tooltip" data-placement="bottom" title="Share on Facebook"><i class="fa fa-facebook"></i></a>
         </span>
         </p>
     </div>
@@ -68,5 +64,46 @@
 {% endfor %}
 
 {% pagination_for object_list "page" "pjax" %}
+
+{% endblock %}
+
+{% block left_panel %}
+{% if request.user.is_authenticated %}
+<div class="well sidebar-nav hidden-xs">
+        <h4>compose miki:</h4>
+        <form action="{% url "link_create" %}" method="POST" class="input-group">
+            {% csrf_token %}
+                <div class="input-group">
+                <input type="text" name="title" maxlength="30" class="form-control" placeholder="Title (max-length: 50 chars)"/><br><br>
+                <textarea maxlength="200" name="body" type="text" class="input-group-lg form-control" rows="3" placeholder="Body (max-length: 200 chars)"></textarea>       
+                </div>
+            <input type="hidden" value="{{ next_url }}" name="next_url">
+            <input type="submit" value="post" class="btn btn-primary">
+   
+        </form>
+</div>
+{% else %}
+<h1>Log in</h1><p></p>
+            <div class="form-group">
+              <form action="{% url "login" %}" method="POST">
+              {% csrf_token %}
+              <div class="input-group">
+                <input type="text" name="username"  class="form-control" placeholder="username/email"/>
+                <input type="password" name="password"  class="form-control" placeholder="password"/>
+           
+                {% if next %}
+                  <input type="hidden" name="next" value="{{ next }}" />
+                {% endif %}
+                <br>
+              <button type="submit" class="btn">Enter</button>
+              </form>
+            </div>
+            <h4>Don't have an account yet? <a href="/accounts/signup">Sign up</a></h4><br>
+    {% if auth_form.non_field_errors %}
+    <div class="bg-danger">
+    {{ auth_form.non_field_errors }}
+     </div>
+    {% endif %}
+{% endif %}
 
 {% endblock %}

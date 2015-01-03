@@ -5,25 +5,22 @@
     <form method="post" action="{% url "rating" %}">{% csrf_token %}
         {% fields_for rating_form %}
     </form>
-	
-    {% if not request.user.is_staff %}
+   
     <span class="arrows">
-    <span class="score" >
-        {{ rating_sum }}
-    </span>
-    </span>
-    {% else %}
-    <span class="arrows">
-        <a href="#"><i class="glyphicon glyphicon-chevron-up"></i></a>
+        {% if request.user.is_staff or request.user.profile.karma >= 10 %}
+        <a href="#" data-toggle="tooltip" data-placement="top" title="Upvote"><i class="glyphicon glyphicon-chevron-up"></i></a>
+        {% endif %}
 		<span class="score">
         {% with rating_obj.comments_count|default:0 as comments_count %}
         <!--{{ rating_sum|add:comments_count }}-->
         {{ rating_sum }}
         {% endwith %}
         </span>
+        {% if request.user.is_staff or request.user.profile.karma >= 30 %}
         <a href="#"><i class="glyphicon glyphicon-chevron-down"></i></a>
+        {% endif %}
     </span>
-    {% endif %}
+    
 
 </div>
 

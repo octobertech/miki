@@ -1,0 +1,64 @@
+{% extends "base.html" %}
+{% load pages_tags mezzanine_tags rating_tags keyword_tags drum_tags future %}
+{% block meta_title %}Timeline{% endblock %}
+{% block title %}{{ block.super }}{% endblock %}
+
+{% block main %}
+        <h3>timeline</h3><br>
+          {% for link in mikis %}
+<div class="link-item clearfix">
+    {% rating_for link %}
+    <div class="link-detail{% if link.rating_sum < 0 %} link-negative{% endif %}">
+        <h2 class="miki-title">
+            <a href="{{ link.get_absolute_url }}" style="color: #333">{{ link.title }}</a> 
+            <span class="keywords">
+            {% keywords_for link as keywords %}
+            {% for keyword in keywords %}
+            {% if not forloop.first %} {% endif %}
+            #{{ keyword }}
+            {% endfor %}
+            </span>
+        </h2>
+        <p>{{ link.body|urlize }}</p>
+        <div class="link-meta">
+        <p>by <a href="{% url "profile" link.user.username %}" data-toggle="tooltip" data-placement="bottom" title="{{ link.user.first_name }} {{ link.user.last_name }}">{{ link.user.profile }}</a> <span class="text-muted"> in {{ link.body|length }} chars  {{ link.publish_date|short_timesince }} ago /</span>
+        <a class="comments" href="{{ link.get_absolute_url }}">{{ link.comments_count }} comment{{ link.comments_count|pluralize }}</a>
+        {% if link.user.id == request.user.id %}
+        <span class="pull-right"><a class="text-muted" href="{% url "link_delete" link.id %}" data-toggle="tooltip" data-placement="bottom" title="Delete"> <small><i class="fa fa-times"></i></small></a></span>
+        {% endif %}   
+        <span class="pull-right sharing"> 
+{% set_short_url_for link %}
+<a class="btn-sm" target="_blank" href="http://twitter.com/home?status={{ link.title|urlencode }}%20-%20{{ link.description|urlencode }}%20{{ link.short_url|urlencode }}%20via%20@mikiapp" data-toggle="tooltip" data-placement="bottom" title="Share on Twitter"><i class="fa fa-twitter"></i></a>
+<a class="btn-sm" target="_blank" href="http://facebook.com/sharer.php?u={{ link.short_url|urlencode }}&amp;t={{ link.title|urlencode }}" data-toggle="tooltip" data-placement="bottom" title="Share on Facebook"><i class="fa fa-facebook"></i></a>
+        </span>
+        </p>
+    </div>
+    </div>
+</div>
+{% empty %}
+<p>There is no mikis in your timeline. <a href="{% url "users" %}">Follow</a> someone to receive them or <a href="{% url "link_create" %}" class="no-pjax">create</a> your own mikis...</p>
+{% endfor %}
+
+          {% pagination_for mikis "page" "pjax" %}
+
+          </table>
+{% endblock %}
+
+{% block left_panel %}
+{% if request.user.is_authenticated %}
+<div class="well sidebar-nav hidden-xs">
+        <h4>compose miki:</h4>
+        <form action="{% url "link_create" %}" method="POST" class="input-group">
+            {% csrf_token %}
+				<div class="input-group">
+				<input type="text" name="title" maxlength="30" class="form-control" placeholder="Title (max-length: 50 chars)"/><br><br>
+                <textarea maxlength="200" name="body" type="text" class="input-group-lg form-control" rows="3" placeholder="Body (max-length: 200 chars)"></textarea>		
+				</div>
+            <input type="hidden" value="{{ next_url }}" name="next_url">
+            <button type="submit" class="btn">post</button>
+         
+        </form>
+</div>
+{% else %}
+{% endif %}
+{% endblock %}

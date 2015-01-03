@@ -18,10 +18,8 @@
 {% block main %}
 
 {% if results.paginator.count == 0 %}
-<p>
-{% blocktrans %}
-No results were found matching your query: {{ query }}
-{% endblocktrans %}
+<br><p>
+Sorry, no mikis were found matching your query: "{{ query }}". Be the first to <a href="{% url "link_create" %}">create them...</a>
 {% else %}
 {% blocktrans with start=results.start_index end=results.end_index total=results.paginator.count %}
 Showing {{ start }} to {{ end }} of {{ total }} results matching your query: {{ query }}
@@ -29,13 +27,13 @@ Showing {{ start }} to {{ end }} of {{ total }} results matching your query: {{ 
 {% endif %}
 </p>
 
-<div id="search-results">
+
     {% for result in results.object_list %}
     <div class="link-item clearfix">
     {% rating_for result %}
     <div class="link-detail{% if result.rating_sum < 0 %} link-negative{% endif %}">
     <h2 style="miki-title">
-        <a href="{{ result.get_absolute_url }}" style="color: #333">{{ result.title }}</a>
+        <a href="{{ result.get_absolute_url }}" style="color: #333; margin: 0">{{ result.title }}</a>
             <span class="keywords">
             {% keywords_for result as keywords %}
             {% for keyword in keywords %}
@@ -44,22 +42,68 @@ Showing {{ start }} to {{ end }} of {{ total }} results matching your query: {{ 
             {% endfor %}
             </span>
     </h2>
-    <p>{{ result.body }}</p>
+    <p>{{ result.body|urlize }}</p>
     <div class="link-meta">
-    <p>by <a href="{% url "profile" result.user.username %}">{{ result.user.profile }}</a> <span class="text-muted"> in {{ result.body|length }} chars  {{ result.publish_date|short_timesince }} ago /</span>
-        <a class="comments" href="{{ result.get_absolute_url }}">{{ result.comments_count }} comment{{ result.comments_count|pluralize }}</a>  
+    <p>by <a href="{% url "profile" result.user.username %}" data-toggle="tooltip" data-placement="bottom" title="{{ result.user.first_name }} {{ result.user.last_name }}">{{ result.user.profile }}</a> <span class="text-muted"> in {{ result.body|length }} chars  {{ result.publish_date|short_timesince }} ago /</span>
+        <a class="comments" href="{{ result.get_absolute_url }}">{{ result.comments_count }} comment{{ result.comments_count|pluralize }}</a> 
+        {% if result.user.id == request.user.id %}
+        <span class="pull-right"><a class="text-muted" href="{% url "link_delete" result.id %}" data-toggle="tooltip" data-placement="bottom" title="Delete"> <small><i class="fa fa-times"></i></small></a></span>
+        {% endif %}  
         <span class="pull-right sharing">
 {% set_short_url_for result %}
-<a class="btn-sm" target="_blank" href="http://twitter.com/home?status={{ result.title|urlencode }}%20-%20{{ result.description|urlencode }}%20{{ result.short_url|urlencode }}%20via%20@mikiapp"><i class="fa fa-twitter"></i></a>
-<a class="btn-sm" target="_blank" href="http://facebook.com/sharer.php?u={{ result.short_url|urlencode }}&amp;t={{ result.title|urlencode }}"><i class="fa fa-facebook"></i></a>
+<a class="btn-sm" target="_blank" href="http://twitter.com/home?status={{ result.title|urlencode }}%20-%20{{ result.description|urlencode }}%20{{ result.short_url|urlencode }}%20via%20@mikiapp" data-toggle="tooltip" data-placement="bottom" title="Share on Twitter"><i class="fa fa-twitter"></i></a>
+<a class="btn-sm" target="_blank" href="http://facebook.com/sharer.php?u={{ result.short_url|urlencode }}&amp;t={{ result.title|urlencode }}" data-toggle="tooltip" data-placement="bottom" title="Share on Facebook"><i class="fa fa-facebook"></i></a>
         </span>
         </p>
     </div>
     </div>
     </div>
+    
     {% endfor %}
-</div>
+
 
 {% pagination_for results %}
+
+{% endblock %}
+
+
+{% block left_panel %}
+{% if request.user.is_authenticated %}
+<div class="well sidebar-nav hidden-xs">
+        <h4>compose miki:</h4>
+        <form action="{% url "link_create" %}" method="POST" class="input-group">
+            {% csrf_token %}
+                <div class="input-group">
+                <input type="text" name="title" maxlength="30" class="form-control" placeholder="Title (max-length: 50 chars)"/><br><br>
+                <textarea maxlength="200" name="body" type="text" class="input-group-lg form-control" rows="3" placeholder="Body (max-length: 200 chars)"></textarea>       
+                </div>
+            <input type="hidden" value="{{ next_url }}" name="next_url">
+            <input type="submit" value="post" class="btn btn-primary">
+   
+        </form>
+</div>
+{% else %}
+<h1>Log in</h1><p></p>
+            <div class="form-group">
+              <form action="{% url "login" %}" method="POST">
+              {% csrf_token %}
+              <div class="input-group">
+                <input type="text" name="username"  class="form-control" placeholder="username/email"/>
+                <input type="password" name="password"  class="form-control" placeholder="password"/>
+           
+                {% if next %}
+                  <input type="hidden" name="next" value="{{ next }}" />
+                {% endif %}
+                <br>
+              <button type="submit" class="btn">Enter</button>
+              </form>
+            </div>
+            <h4>Don't have an account yet? <a href="/accounts/signup">Sign up</a></h4><br>
+    {% if auth_form.non_field_errors %}
+    <div class="bg-danger">
+    {{ auth_form.non_field_errors }}
+     </div>
+    {% endif %}
+{% endif %}
 
 {% endblock %}

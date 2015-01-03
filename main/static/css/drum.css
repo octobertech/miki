@@ -11,7 +11,7 @@
 .alert a {text-decoration:none;}
 body {
   color:#555;
-  background-color: #fafafa; 
+  background-color: #f7f7f7; 
 }
 
 p {
@@ -33,7 +33,9 @@ footer {background: none; }
 .link-item, .comment-item, .comment-links, #comments h3 {
     border:0 solid rgba(0,0,0,.02);
 }
-.link-item, .comment-item, .comment-links {background-color: #fff; border-bottom-width:3px;}
+.link-item, .comment-item, .comment-links {background-color: #fff; }
+.link-item {border-width: 1px; border-color: #ebebeb;}
+.link-item:hover {background-color: #f6f6f6 !important;}
 #comments h3 {border-top-width:5px;}
 
 /* Rating widget with up/down arrows */
@@ -271,11 +273,7 @@ a {
 .pagination {margin:40px 0;}
 .pagination p {float:left;}
 
-.navbar-brand {
-    margin-left:10px; 
-    margin-top: -2px; 
-    font-size: 25px;
-}
+
 
 .dropdown-menu > li > a:hover,
 .dropdown-menu > li > a:focus {
@@ -307,3 +305,15 @@ ol.unstyled {
 }
 
 .comment-item {background-color: #fff !important;}
+
+.navbar-brand {
+    margin-right: -20px !important; 
+    font-size: 25px;
+    color: #222 !important;
+}
+
+.mikis {background-color: #fff !important;}
+
+.navbar {
+  background-color: rgba(255, 255, 255, 0.9) !important;
+} 

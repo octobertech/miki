@@ -4,19 +4,63 @@ from future.builtins import super
 from datetime import timedelta
 
 from django.contrib.auth.models import User
+from django.contrib.auth.decorators import login_required
 from django.contrib.messages import info, error, success
-
 from django.forms.models import modelform_factory
-from django.shortcuts import get_object_or_404, redirect
+from django.shortcuts import get_object_or_404, redirect, render
 from django.utils.timezone import now
-from django.views.generic import ListView, CreateView, DetailView
+from django.views.generic import ListView, CreateView, DetailView, DeleteView
+from django.db.models import Count
+from django.http import Http404
+from django.core.urlresolvers import reverse_lazy
 
 from mezzanine.conf import settings
 from mezzanine.generic.models import ThreadedComment
 from mezzanine.utils.views import paginate
 
-from .models import Link
+from .models import Link, Profile
 from .utils import order_by_score
+
+from main.forms import AuthenticateForm, MikiForm
+
+from snapsearch import *
+
+from api.permissions import IsOwnerOrReadOnly
+
+def index(request, auth_form=None):
+
+    if request.user.is_authenticated():
+        miki_form = MikiForm()
+        user = request.user
+        profile = request.user.profile
+        mikis_self = Link.objects.filter(user_id=user.id)
+        mikis_following = Link.objects.filter(user__profile__in=profile.follows.all)
+        mikis = mikis_self | mikis_following
+        mikis = paginate(mikis.order_by('-publish_date'), request.GET.get("page", 1),
+            settings.ITEMS_PER_PAGE, settings.MAX_PAGING_LINKS)
+        
+
+        return render(request,
+                      'timeline.html',
+                      {'miki_form': miki_form, 'user': user,
+                       'mikis': mikis, 'next_url': '/', 'username': request.user.username})
+
+    else:
+        # User is not logged in
+        auth_form = auth_form or AuthenticateForm()
+        if request.method == 'POST':
+            form = AuthenticateForm(data=request.POST)
+            if form.is_valid():
+                login(request, form.get_user())
+                # Success
+                return redirect('/')
+                
+            else:
+                # Failure
+                return index(request, auth_form=form)
+                
+        return render(request,
+                      'home.html', {'auth_form': auth_form, })
 
 
 class UserFilterView(ListView):
@@ -39,8 +83,8 @@ class UserFilterView(ListView):
             profile_user = get_object_or_404(users, **lookup)
             qs = context["object_list"].filter(user=profile_user)
             context["object_list"] = qs
-        context["profile_user"] = profile_user
-        context["no_data"] = ("Sorry, there is no data here.")
+        context["profile_user"] = profile_user           
+        context["no_data"] = ('Sorry, no such mikis. Be the first to create it')
         return context
 
 
@@ -96,7 +140,7 @@ class LinkList(LinkView, ScoreOrderingView):
         if context["profile_user"]:
             return "%s" % context["profile_user"].profile
         else:
-            return "Latest"
+            return ""
 
 
 
@@ -146,6 +190,14 @@ class LinkDetail(LinkView, DetailView):
     pass
 
 
+class LinkDelete(LinkView, DeleteView):
+
+    model = Link
+    success_url = '/users/'
+    permission_classes = (IsOwnerOrReadOnly,)
+
+
+
 class CommentList(ScoreOrderingView):
     """
     List view for comments, which can be for all users ("comments" and
@@ -172,3 +224,79 @@ class CommentList(ScoreOrderingView):
         else:
             return "Latest comments"
 
+def follow(request):
+    try:
+        user = User.objects.get(id=request.POST.get('follow'))
+    except User.DoesNotExist:
+        raise Http404
+    if request.method == "POST":
+        follow_id = request.POST.get('follow', False)
+        if follow_id:
+            try:
+                user = User.objects.get(id=follow_id)
+                request.user.profile.follows.add(user.profile)
+                success(request, 'Successfully followed this user.' )
+            except User.DoesNotExist:
+                error(request, 'Sorry, there is no such user.')
+                return redirect('/discover/users/')
+    return redirect('/users/'+ user.username)
+
+
+def unfollow(request):
+    try:
+        user = User.objects.get(id=request.POST.get('follow'))
+    except User.DoesNotExist:
+        raise Http404
+    if request.method == "POST":
+        follow_id = request.POST.get('follow', False)
+        if follow_id:
+            try:
+                user = User.objects.get(id=follow_id)
+                request.user.profile.follows.remove(user.profile)
+                success(request, 'Successfully unfollowed this user.' )
+            except User.DoesNotExist:
+                error(request, 'Sorry, there is no such user.')
+                return redirect('/discover/users/')
+    return redirect('/users/'+ user.username)
+
+
+
+
+
+@login_required
+def users(request, username="", miki_form=None):
+    pass
+    if username:
+        #Show a profile
+        try:
+            user = User.objects.get(username=username)
+        except User.DoesNotExist:
+            raise Http404
+       
+        user_miki_count = Link.objects.filter(user_id=user.id).count()
+        mikis = paginate(Link.objects.filter(user_id=user.id).order_by('-publish_date'), request.GET.get("page", 1),
+            settings.ITEMS_PER_PAGE, settings.MAX_PAGING_LINKS)
+        if username == request.user.username:
+            #Self profile 
+            return render(request, 'profile.html', {'user': user, 'mikis': mikis, 'user_miki_count': user_miki_count , 'username': request.user.username})
+        if request.user.profile.follows.filter(user__username=username):
+            #Following profile
+            return render(request, 'profile.html', {'user': user, 'mikis': mikis, 'following': True, 'user_miki_count': user_miki_count , 'username': request.user.username})
+        return render(request, 'profile.html', {'user': user, 'mikis': mikis, 'follow': True, 'user_miki_count': user_miki_count, 'username': request.user.username })
+    query_string = ""
+    found_entries=None
+    searched = False
+    if ('q' in request.GET) and request.GET['q'].strip():
+        searched = True
+        query_string = request.GET['q']
+        entry_query = get_query(query_string, ['first_name', 'last_name', 'username'])
+        found_entries = paginate(User.objects.filter(entry_query).annotate(miki_count=Count('links')).order_by('-miki_count'), request.GET.get("page", 1),
+            settings.ITEMS_PER_PAGE, settings.MAX_PAGING_LINKS)
+        return render(request, 'users.html', {'found_entries': found_entries,  'miki_form': miki_form, 'username': request.user.username, 'query_string': query_string, 'searched': searched})
+        
+    found_entries = paginate(User.objects.prefetch_related('profile__followed_by').all().annotate(miki_count=Count('links')).order_by('-miki_count'), request.GET.get("page", 1),
+            settings.ITEMS_PER_PAGE, settings.MAX_PAGING_LINKS)
+   
+    miki_form = miki_form or MikiForm()
+    
+    return render(request, 'users.html', {'found_entries': found_entries,  'miki_form': miki_form, 'username': request.user.username, 'query_string': query_string, 'searched': searched})

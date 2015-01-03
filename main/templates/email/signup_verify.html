@@ -2,7 +2,7 @@
 {% block main %}
 <p>{% trans "Hi" %} {{ user.first_name }}! </p>
 <p>{% trans "Congratulations! Your Miki account has been activated." %}</p>
-<p>{% trans "Please use the link below to activate it." %}</p>
+<p>{% trans "Please use the link below to confirm it." %}</p>
 <p><a href="http://{{ request.get_host }}{{ verify_url }}">http://{{ request.get_host }}{{ verify_url }}</a></p>
 <br>
 <p>Miki team.</p>
