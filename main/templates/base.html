@@ -9,7 +9,7 @@
 <meta name="description" content="{% block meta_description %}{% endblock %}">
 <title>{% block meta_title %}{% endblock %}{% if settings.SITE_TITLE %} | {{ settings.SITE_TITLE }}{% endif %}</title>
 <link rel="shortcut icon" href="{{ STATIC_URL }}img/favicon.ico">
-
+<link rel="publisher" href="https://plus.google.com/106085179833629846976" >
 <link href="http://netdna.bootstrapcdn.com/bootswatch/3.1.1/journal/bootstrap.min.css" rel="stylesheet">
 {% compress css %}
 <link rel="stylesheet" href="{{ STATIC_URL }}css/mezzanine.css">
@@ -33,9 +33,18 @@
 
 
 {% block extra_head %}{% endblock %}
-
+<script src="https://apis.google.com/js/platform.js" async defer></script>
 </head>
 <body>
+
+<div id="fb-root"></div>
+<script>(function(d, s, id) {
+  var js, fjs = d.getElementsByTagName(s)[0];
+  if (d.getElementById(id)) return;
+  js = d.createElement(s); js.id = id;
+  js.src = "//connect.facebook.net/en_GB/sdk.js#xfbml=1&version=v2.0";
+  fjs.parentNode.insertBefore(js, fjs);
+}(document, 'script', 'facebook-jssdk'));</script>
 
     <nav class="navbar navbar-default navbar-fixed-top" role="navigation">
     <div class="container">
@@ -113,6 +122,8 @@
     {% include "twitter/tweets.html" %}
     {% endifinstalled %}
     {% endblock %}
+    <div class="g-page" data-width="180" data-href="//plus.google.com/u/0/106085179833629846976" data-rel="publisher"></div>
+    <div class="fb-like-box" data-href="https://www.facebook.com/themikicom" data-width="180" data-colorscheme="light" data-show-faces="true" data-header="false" data-stream="false" data-show-border="false"></div><p></p>
     <a class="twitter-timeline" href="https://twitter.com/mikiapp" data-widget-id="540156022870929410">Tweets by @mikiapp</a>
     </div>
     </div>
@@ -136,13 +147,23 @@
 <div class="col-md-12">
 <p class="site-info text-center" style="font-size: 16px; margin: 8px;">
     The Miki Beta. <br><br>
-    Made by <a href="/users/atai">Atai Kang</a> in partnership with <a href="http://octobertech.org/" target="_blank">OctoberTech.org</a>.<br><br>
+    Made by <a href="/users/atai">Atai Kang</a>. Hosting by <a href="https://www.digitalocean.com/?refcode=1728cc989345" target="_blank" title="Referral link with $10 credit. Spent 1st $25 - provide us $25">Digital Ocean</a>.<br><br>
     © Miki App 2013, 2014, 2015.
 </p>
 </div>
 </div>
 </div>
 </footer>
+
+<script>
+$(document).ready(function() {
+  //Set the carousel options
+  $('#quote-carousel').carousel({
+    pause: true,
+    interval: 7000,
+  });
+});
+</script>
 
 <script>
 $(function () {

@@ -19,7 +19,7 @@
 
 {% if results.paginator.count == 0 %}
 <br><p>
-Sorry, no mikis were found matching your query: "{{ query }}". Be the first to <a href="{% url "link_create" %}">create them...</a>
+Sorry, no mikis were found matching your query: "{{ query }}". Be the first to <a href="{% url "link_create" %}"  class="no-pjax">create them...</a>
 {% else %}
 {% blocktrans with start=results.start_index end=results.end_index total=results.paginator.count %}
 Showing {{ start }} to {{ end }} of {{ total }} results matching your query: {{ query }}
