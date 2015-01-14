@@ -414,14 +414,18 @@ ol.unstyled {
     #quote-carousel .carousel-indicators li {
         display: inline-block;
         margin: 0px 5px;
-        width: 15px;
-        height: 15px;
+        width: 10px;
+        height: 10px;
     }
     #quote-carousel .carousel-indicators li.active {
         margin: 0px 5px;
-        width: 20px;
-        height: 20px;
+        width: 13px;
+        height: 13px;
     }
+    h1 {font-size: 46px; font-weight: bold;}
 }
 
 .carousel {background-color: #fff !important;}
+
+.g-plusone {text-align: left !important;}
+.fb-like {margin-top: -5px; text-align: right !important;}

@@ -21,7 +21,7 @@
          
         <span class="pull-right sharing"> 
 {% set_short_url_for object %}
-<a class="btn-sm" target="_blank" href="http://twitter.com/home?status={{ object.title|urlencode }}%20-%20{{ object.description|urlencode }}%20{{ object.short_url|urlencode }}%20via%20@mikiapp" data-toggle="tooltip" data-placement="bottom" title="Share on Twitter"><i class="fa fa-twitter"></i></a>
+<a class="btn-sm" target="_blank" href="http://twitter.com/home?status={{ object.title|urlencode }}%0A{{ object.description|urlencode }}%20{{ object.short_url|urlencode }}%0Avia%20@mikiapp%20in%20{{ object.body|length|urlencode }}%20chars" data-toggle="tooltip" data-placement="bottom" title="Share on Twitter"><i class="fa fa-twitter"></i></a>
 <a class="btn-sm" target="_blank" href="http://facebook.com/sharer.php?u={{ object.short_url|urlencode }}&amp;t={{ object.title|urlencode }}" data-toggle="tooltip" data-placement="bottom" title="Share on Facebook"><i class="fa fa-facebook"></i></a>
         </span>
         {% if object.user.id == request.user.id %}

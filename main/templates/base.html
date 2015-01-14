@@ -21,6 +21,7 @@
 .navbar {
    background-color: rgba(255, 255, 255, 0.9);
 } 
+.fb-like {margin-top: -5px !important;}
 </style>
 
 {% compress js %}
@@ -28,7 +29,7 @@
 <script src="{{ STATIC_URL }}js/bootstrap.js"></script>
 <script src="{{ STATIC_URL }}js/drum.js"></script>
 <script src="{{ STATIC_URL }}js/jquery.pjax.js"></script>
-
+<script src="{{ STATIC_URL }}js/carousel.js"></script>
 {% endcompress %}
 
 
@@ -122,8 +123,6 @@
     {% include "twitter/tweets.html" %}
     {% endifinstalled %}
     {% endblock %}
-    <div class="g-page" data-width="180" data-href="//plus.google.com/u/0/106085179833629846976" data-rel="publisher"></div>
-    <div class="fb-like-box" data-href="https://www.facebook.com/themikicom" data-width="180" data-colorscheme="light" data-show-faces="true" data-header="false" data-stream="false" data-show-border="false"></div><p></p>
     <a class="twitter-timeline" href="https://twitter.com/mikiapp" data-widget-id="540156022870929410">Tweets by @mikiapp</a>
     </div>
     </div>
@@ -148,22 +147,19 @@
 <p class="site-info text-center" style="font-size: 16px; margin: 8px;">
     The Miki Beta. <br><br>
     Made by <a href="/users/atai">Atai Kang</a>. Hosting by <a href="https://www.digitalocean.com/?refcode=1728cc989345" target="_blank" title="Referral link with $10 credit. Spent 1st $25 - provide us $25">Digital Ocean</a>.<br><br>
-    © Miki App 2013, 2014, 2015.
+    © Miki App 2013, 2014, 2015.<br><br>
+    <div class="text-center">
+    <div class="g-plusone" data-href="http://www.themiki.com/"></div>
+    <a href="https://twitter.com/share" class="twitter-share-button" data-url="http://www.themiki.com/" data-text="Check out @MikiApp - the world's first social micro encyclopedia..." data-hashtags="MikiApp">Tweet</a>
+    <div class="fb-like" data-href="https://www.facebook.com/themikicom" data-layout="button_count" data-action="like" data-show-faces="false" data-share="false" style="padding-top: -5px !important;"></div>
+
+    </div>
 </p>
 </div>
 </div>
 </div>
 </footer>
 
-<script>
-$(document).ready(function() {
-  //Set the carousel options
-  $('#quote-carousel').carousel({
-    pause: true,
-    interval: 7000,
-  });
-});
-</script>
 
 <script>
 $(function () {
