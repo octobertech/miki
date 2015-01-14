@@ -422,7 +422,7 @@ ol.unstyled {
         width: 13px;
         height: 13px;
     }
-    h1 {font-size: 46px; font-weight: bold;}
+    .home-miki-title {font-size: 46px; font-weight: bold; margin-bottom: 5px;}
 }
 
 .carousel {background-color: #fff !important;}
