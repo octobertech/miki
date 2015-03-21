@@ -2,18 +2,14 @@
 
 <form action="{% url "search" %}" class="navbar-form" role="search">
 <div class="input-group">
-<input class="form-control" placeholder="{% trans "search now" %}" type="text" name="q" value="{{ request.REQUEST.q }}" style="">
+<input class="form-control" placeholder="{% trans "search by title in micro encyclopedia" %}" type="text" name="q" value="{{ request.REQUEST.q }}" style="">
 <span class="input-group-btn">
-    <button type="submit" class="btn"><i class="glyphicon glyphicon-search"></i></button>
-</span>
-</div>
-
 {% if search_model_choices %}
     {% if search_model_choices|length == 1 %}
     <input type="hidden" name="type" value="{{ search_model_choices.0.1 }}">
     {% else %}
-    <select name="type">
-        <option value="">{% trans "Everything" %}</option>
+    <select name="type" class="form-control" >
+        <option value=""><i class="fa fa-globe"></i> {% trans "All" %}</option>
         {% for verbose_name, model in search_model_choices %}
         <option value="{{ model }}"
             {% if model == request.REQUEST.type  %}selected{% endif %}>
@@ -23,5 +19,12 @@
     </select>
     {% endif %}
 {% endif %}
+</span>  
+<span class="input-group-btn">
+    <button type="submit" class="btn btn-primary"><i class="glyphicon glyphicon-search"></i></button>
+</span>
+</div>
+
+
 
 </form>

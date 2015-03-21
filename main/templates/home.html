@@ -1,53 +1,61 @@
 {% extends "base.html" %}
-{% block meta_title %}Miki - the social micro encyclopedia{% endblock %}
+{% block meta_title %}Miki - the world's first Mobile Individualized Collaborative E-learning platform that make it easy and comfy the way we find, learn and share knowledge...{% endblock %}
 {% block title %}{% endblock %}
 {% block main %}
  <div class="jumbotron">
-              <h1 class="home-miki-title"><a href="/about/" style="color: #333">miki</a></h1>
-              <p style="line-height: 1.3; margin-bottom: 10px;">a social micro encyclopedic service that enable everyone to easily find, learn and share knowledge and simple definitions in 140 characters.</p>
+              <h1 class="home-miki-title"><a href="/about/" style="color: #333; font-weight: 500;">miki</a></h1>
+              <p style="line-height: 1.3; margin-bottom: 10px;">the world's first Mobile Individualized Collaborative E-learning platform that make it easy, comfortable and affordable the way we find, learn and share knowledge...</p>
               <p><a href="/about/"><small>learn more</small></a></p>
 </div>
-            <table class="mikis table table-bordered table-hover">
-              <tbody>
-                <tr>
-                  <td>
-                    <div class="media miki">
-                      <div class="media-body">
-                        <h3 class="media-heading"><a href="#" style="color: #222;">miki</a></h3>
-                        <p></p>
-                        <h4 style="color: #444;">the social micro encyclopedia</h4>
-						<h5 style="color: #999; margin-top: 10px;">by <a href="#" >miki</a>   1 hours ago</h5>
-                      </div>
-                    </div>
-                  </td>
-                </tr>
-              </tbody>
-              <tbody>
-                <tr>
-                  <td>
-                    <div class="media miki">
-                      <div class="media-body">
-                        <h3 class="media-heading"><a href="#" style="color: #222;">miki</a></h3>
-                        <h4 style="color: #444;">makes Wiki really simple, social and modern like Twitter.<br></h4>
-						<h5 style="color: #999; margin-top: 10px;">by <a href="#" >miki</a>   3 hours ago</h5>
-                      </div>
-                    </div>
-                  </td>
-                </tr>
-                <tr>
-                  <td>
-                    <div class="media miki">
-                      <div class="media-body">
-                        <h3 class="media-heading"><a href="#" style="color: #222;">miki</a></h3>
-                        <h4 style="color: #444;">put it simply</h4>
-						<h5 style="color: #999; margin-top: 10px;">by <a href="#">miki</a>   8 hours ago</h5>
-                      </div>
-                    </div>
-                  </td>
-                </tr>
-              </tbody>
-            </table>
 
+<div style="text-align: center">       
+ <h3>Features:</h3><br>
+ <div class="row" >
+                <div class="col-lg-4 col-md-4">
+            <i class="fa fa-pencil-square-o" style="font-size:40px"></i>
+                    <h4>World's first micro encyclopedia (microblogging)</h4>
+                </div>
+                <div class="col-lg-4 col-md-4">
+            <i class="fa fa-search-plus" style="font-size:40px"></i>
+                    <h4>Advanced web search engine (soon)</h4>
+                </div>
+                <div class="col-lg-4 col-md-4">
+                    <i class="fa fa-comments-o" style="font-size:40px"></i>
+                    <h4>Chat / messaging mobile app (soon). <a href="http://mikiapp.co" target="_blank">Visit site </a></h4>
+                </div>
+                
+
+ </div><br>
+ <div class="row">
+                <div class="col-lg-4 col-md-4">
+                    <i class="fa fa-university" style="font-size:40px"></i>
+                    <h4>Free world's knowledge resource media library (soon)</h4>
+                </div>
+                <div class="col-lg-4 col-md-4">
+                    <i class="fa fa-cart-arrow-down" style="font-size:40px"></i>
+                    <h4>Market / online store with vast collection of e-books, educational apps and content (soon)</h4>
+                </div>
+                <div class="col-lg-4 col-md-4">
+                    <i class="fa fa-graduation-cap" style="font-size:40px"></i>
+                    <h4>Advanced MOOC engine (soon)</h4>
+                </div>
+ </div><br>
+ <div class="row">
+                <div class="col-lg-4 col-md-4">
+                    <i class="fa fa-calendar" style="font-size:40px"></i>
+                    <h4>Smart calendar / curriculum (soon)</h4>
+                </div>
+                <div class="col-lg-4 col-md-4">
+                    <i class="fa fa-envelope" style="font-size:40px"></i>
+                    <h4>Email (soon)</h4>
+                </div>
+                <div class="col-lg-4 col-md-4">
+                    <i class="fa fa-line-chart" style="font-size:40px"></i>
+                    <h4>Analytics / Assesment (soon)</h4>
+                </div>
+ </div>
+
+ <br>
             
  <h3>Reviews:</h3>
   <div class='row'>
@@ -125,7 +133,7 @@ improve this.</p>
                 <a href="http://octobertech.org" target="_blank"><img src="/static/img/OT_logo_med_cut.jpg" width="180" height="90"/></a>
               </div>
             </div>
-
+</div>
 
 {% endblock %}
 
@@ -145,7 +153,8 @@ improve this.</p>
               <button type="submit" class="btn">Enter</button>
               </form>
             </div>
-            <h4>Don't have an account yet? <a href="/accounts/signup">Sign up</a></h4><br>
+            <h4>Don't have an account yet? <a href="/accounts/signup">Sign up</a></h4>
+            <small>*Currently registration is only open for .edu accounts holders.</small><br><br>
     {% if auth_form.non_field_errors %}
     <div class="bg-danger">
     {{ auth_form.non_field_errors }}

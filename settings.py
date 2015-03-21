@@ -116,7 +116,23 @@ LANGUAGE_CODE = "en"
 _ = lambda s: s
 LANGUAGES = (
     ('en', _('English')),
+#    ('ru', _('Russian')),
+#    ('zh-cn', _('Simplified Chinese')),
 )
+
+# Mapping between Languages and Sites
+#LANGUAGE_SITE_MAP = {
+#    'en': 1,
+#    'ru': 2,
+#    'zh-cn': 3,
+#}
+
+# Location for the language translations
+#LOCALE_PATHS = (
+#    (os.path.join(BASE_DIR, u'locale/zh-cn')),
+#    (os.path.join(BASE_DIR, u'locale/en')),
+#    (os.path.join(BASE_DIR, u'locale/ru')),
+#)
 
 # A boolean that turns on/off debug mode. When set to ``True``, stack traces
 # are displayed for error pages. Should always be set to ``False`` in
@@ -317,8 +333,7 @@ DEBUG_TOOLBAR_CONFIG = {"INTERCEPT_REDIRECTS": False}
 
 # Drum-specific Mezzanine settings
 AUTH_PROFILE_MODULE = "main.Profile"
-SITE_TITLE = "MIKI"
-RATINGS_RANGE = (-1, 1)
+SITE_TITLE = "Miki"
 RATINGS_ACCOUNT_REQUIRED = True
 COMMENTS_ACCOUNT_REQUIRED = True
 ACCOUNTS_PROFILE_VIEWS_ENABLED = True
@@ -327,9 +342,8 @@ ACCOUNTS_PROFILE_FORM_EXCLUDE_FIELDS = (
     "follows",
 )
 
-ACCOUNTS_VERIFICATION_REQUIRED = False
-ACCOUNTS_APPROVAL_REQUIRED = False
-
+ACCOUNTS_VERIFICATION_REQUIRED = True
+ACCOUNTS_APPROVAL_REQUIRED = True
 
 
 # Drum settings

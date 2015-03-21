@@ -99,7 +99,7 @@
 
 {% block left_panel %}
 {% if request.user.is_authenticated %}
-<div class="well sidebar-nav hidden-xs">
+<div class="well hidden-xs">
         <h4>compose miki:</h4>
         <form action="/submit" method="POST" class="input-group">
             {% csrf_token %}

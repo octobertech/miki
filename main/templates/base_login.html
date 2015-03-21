@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html lang="{{ LANGUAGE_CODE }}">
+{% load pages_tags mezzanine_tags i18n future staticfiles %}
+<head>
+
+<meta http-equiv="Content-type" content="text/html; charset=utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="keywords" content="{% block meta_keywords %}{% endblock %}">
+<meta name="description" content="{% block meta_description %}{% endblock %}">
+<title>{% block meta_title %}{% endblock %}{% if settings.SITE_TITLE %} | {{ settings.SITE_TITLE }}{% endif %}</title>
+<link rel="shortcut icon" href="{{ STATIC_URL }}img/favicon.ico">
+
+<style></style>
+{% compress css %}
+<link rel="stylesheet" href="{{ STATIC_URL }}css/bootstrap.css">
+<link rel="stylesheet" href="{{ STATIC_URL }}css/bootstrap-theme.css">
+<link rel="stylesheet" href="{{ STATIC_URL }}css/mezzanine.css">
+<link rel="stylesheet" href="{{ STATIC_URL }}css/bootstrap2-responsive.css">
+<link rel="stylesheet" href="{{ STATIC_URL }}css/drum.css">
+{% endcompress %}
+
+{% compress js %}
+<script src="{{ STATIC_URL }}mezzanine/js/{{ settings.JQUERY_FILENAME }}"></script>
+<script src="{{ STATIC_URL }}js/bootstrap.js"></script>
+<script src="{{ STATIC_URL }}js/bootstrap2-extras.js"></script>
+<script src="{{ STATIC_URL }}js/drum.js"></script>
+<script src="{{ STATIC_URL }}js/jquery.pjax.js"></script>
+
+{% endcompress %}
+
+{% block extra_head %}{% endblock %}
+<style>
+.navbar {
+   background-color: rgba(255, 255, 255, 0.9);
+} 
+a {color: #F72F75;}
+a:hover {color: #C7285F;}
+.btn-primary {
+color: #ffffff;
+background-color: #F72F75 !important;
+border-color: #F72F75 !important;
+}
+.panel-default {
+border-top-color: #F72F75 !important;
+}
+.nav-tabs > li.active > a, .nav-tabs > li.active > a:hover {
+border-top: 2px solid #F72F75 !important;
+}
+.well {
+  color: #333;
+  background-color: #FFF;
+  border: 1px solid #dddddd;
+  webkit-box-shadow: 0 1px 10px rgba(0, 0, 0, 0.15);
+  -moz-box-shadow: 0 1px 10px rgba(0, 0, 0, 0.15);
+  box-shadow: 0 1px 10px rgba(0, 0, 0, 0.15);
+}
+.btn:hover {
+    color: #F72F75;
+}
+.dropdown-menu > li > a:hover {
+    background-color: #F72F75 !important;
+}
+</style>
+</head>
+<body>
+
+<div class="container">
+<div class="row">
+<div class="col-md-4">
+</div>
+<div class="col-md-4" style="text-center">
+<h1><a href="http://www.themiki.com/" title="www.themiki.com"><img src="{{ STATIC_URL }}img/miki_new_logo.png" class="img-rounded img-responsive" style="margin-top: 50px;" /></a></h1>
+    {% block main %}{% endblock %}
+</div>
+<div class="col-md-4">
+</div>
+</div>
+</div>
+
+<footer>
+
+<div class="container">
+<div class="row">
+<div class="col-md-12">
+<p class="site-info text-center" style="font-size: 16px; margin: 8px;">
+    The Miki Beta. <br><br>
+    Founded by <a href="/users/atai">Atai Kang</a> with <a href="http://octobertech.org/" target="_blank">OctoberTech.org</a> in 2014.<br><br>
+    Copyright © Miki EdTech 2015. All rights reserved.<br>
+</p>
+</div>
+</div>
+</div>
+</footer>
+
+</body>
+</html>

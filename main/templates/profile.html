@@ -30,7 +30,7 @@
                       </form>
             {% endif %}
             {% if user == request.user %}
-            <a class="btn btn-default" href="{% url "profile_update" %}">Update profile</a>
+            <a href="{% url "profile_update" %}" class="btn">Update profile</a>
             {% endif %}
 
 					  </p>

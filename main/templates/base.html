@@ -10,27 +10,54 @@
 <title>{% block meta_title %}{% endblock %}{% if settings.SITE_TITLE %} | {{ settings.SITE_TITLE }}{% endif %}</title>
 <link rel="shortcut icon" href="{{ STATIC_URL }}img/favicon.ico">
 <link rel="publisher" href="https://plus.google.com/106085179833629846976" >
-<link href="http://netdna.bootstrapcdn.com/bootswatch/3.1.1/journal/bootstrap.min.css" rel="stylesheet">
 {% compress css %}
+<link rel="stylesheet" href="{{ STATIC_URL }}css/bootstrap.css" >
 <link rel="stylesheet" href="{{ STATIC_URL }}css/mezzanine.css">
 <link rel="stylesheet" href="{{ STATIC_URL }}css/drum.css">
+
 {% endcompress %}
 <link href='http://fonts.googleapis.com/css?family=Open+Sans&subset=latin,cyrillic' rel='stylesheet' type='text/css'>
-<link href="//maxcdn.bootstrapcdn.com/font-awesome/4.2.0/css/font-awesome.min.css" rel="stylesheet">
+<link href="//maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css" rel="stylesheet">
 <style>
 .navbar {
    background-color: rgba(255, 255, 255, 0.9);
 } 
-.fb-like {margin-top: -5px !important;}
+a {color: #F72F75;}
+a:hover {color: #C7285F;}
+.btn-primary {
+color: #ffffff;
+background-color: #F72F75 !important;
+border-color: #F72F75 !important;
+}
+.panel-default {
+border-top-color: #F72F75 !important;
+}
+.nav-tabs > li.active > a, .nav-tabs > li.active > a:hover {
+border-top: 2px solid #F72F75 !important;
+}
+.well {
+  color: #333;
+  background-color: #FFF;
+  border: 1px solid #dddddd;
+  webkit-box-shadow: 0 1px 10px rgba(0, 0, 0, 0.15);
+  -moz-box-shadow: 0 1px 10px rgba(0, 0, 0, 0.15);
+  box-shadow: 0 1px 10px rgba(0, 0, 0, 0.15);
+}
+.btn:hover {
+    color: #F72F75;
+}
+.dropdown-menu > li > a:hover {
+    background-color: #F72F75 !important;
+}
 </style>
 
+<link rel="stylesheet" href="{{ STATIC_URL }}css/simple-sidebar.css" >
 {% compress js %}
 <script src="{{ STATIC_URL }}mezzanine/js/jquery-1.11.2.min.js"></script>
 <script src="{{ STATIC_URL }}js/bootstrap.js"></script>
 <script src="{{ STATIC_URL }}js/drum.js"></script>
 <script src="{{ STATIC_URL }}js/jquery.pjax.js"></script>
 {% endcompress %}
-
 
 {% block extra_head %}{% endblock %}
 <script src="https://apis.google.com/js/platform.js" async defer></script>
@@ -56,18 +83,16 @@
         <span class="icon-bar"></span>
     </button>
     
-    {% if settings.SITE_TITLE %}<a class="navbar-brand" href="/" >{{ settings.SITE_TITLE }}</a>{% endif %}
+    
+    {% if settings.SITE_TITLE %}<a class="navbar-brand" style="text-transform: lowercase; font-weight: 600; font-size: 24px; display: inline !important; color: #333 !important;" href="#menu-toggle" id="menu-toggle"><span class="text-muted" style="font-weight: 500;"><img src="{% static "img/bars.png" %}" width="20px;" />the</span>{{ settings.SITE_TITLE }}</a>{% endif %}
     
     </div>
 	<div class="navbar-collapse collapse" id="navbar-collapse">
     <div class="row">
-    <div class="col-md-4 navbar-left">
+    <div class="col-md-5 navbar-left">
 	{% search_form "main.Link" %}
     </div>
-    <div class="col-md-7 navbar-right">
-	<ul class="nav navbar-nav" role="navigation">
-        
-    </ul>
+    <div class="col-md-5 navbar-right">
     
     <ul class="nav navbar-nav navbar-right" role="navigation">
         
@@ -76,15 +101,15 @@
         {% url "comment_list_best" as comment_list_best %}
         {% url "home" as home %}
         {% url "timeline" as timeline %}
-        <li{% if request.path == timeline %} class="active"{% endif %}><a href="{{ timeline }}"><i class="fa fa-home"></i> Home</a></li>
-        <li{% if request.path == home or request.path == link_list_latest %} class="active"{% endif %}><a href="{{ home }}"><i class="fa fa-globe"></i> Discover</a></li>
+        <li{% if request.path == timeline %} class="active"{% endif %}><a href="{{ timeline }}"><i class="fa fa-home"></i> home</a></li>
+        <li{% if request.path == home or request.path == link_list_latest %} class="active"{% endif %}><a href="{{ home }}"><i class="fa fa-globe"></i> discover</a></li>
 	{% nevercache %}
     {% include "accounts/includes/user_panel_nav.html" %}
     {% endnevercache %}
     {% if request.user.is_authenticated %}
     <li><form action="{% url "link_create" %}">
     {% csrf_token %}
-    <button class="btn btn-md btn-inverse no-pjax " style="margin-top: 10px; margin-left: 10px;" title="New miki"><i class="fa fa-pencil-square-o fa-lg"></i> New</button></form></li>
+    <button class="btn btn-md btn-inverse no-pjax " style="margin-top: 5px; margin-left: 10px;" title="New miki"><i class="fa fa-pencil-square-o fa-lg"></i> new</button></form></li>
     {% else %}
     {% endif %}
     </ul>
@@ -94,7 +119,47 @@
 </div>
 </nav>
 
-<div class="container main">
+<div id="wrapper">
+
+        <!-- Sidebar -->
+        <div id="sidebar-wrapper">
+            <ul class="sidebar-nav">
+                <br>
+                
+                <li {% if request.path == timeline %} class="active"{% endif %}>
+                    <a href="{{ timeline }}">Home</a>
+                </li>
+                <li {% if request.path == "/about/" %} {% endif %}>
+                    <a href="/about/">About</a>
+                </li>
+                <li>
+                    <a href="/discover/">Discover</a>
+                </li>
+                <li>
+                    <a href="/fellows/">Fellows</a>
+                </li>
+                <li>
+                    <a href="/blog/">Blog</a>
+                </li>
+                <li>
+                    <a href="/legals/">Legals & PR</a>
+                </li>             
+                
+                <li>
+                    <a href="/contact/">Contact</a>
+                </li>
+            </ul>
+        </div>
+        <!-- /#sidebar-wrapper -->
+
+        <!-- Page Content -->
+        <div id="page-content-wrapper">
+            <div class="container-fluid">
+                <div class="row">
+                    <div class="col-lg-12">
+                        
+
+<div class="container">
 {% nevercache %}
 {% for message in messages %}
 <div class="alert alert-{{ message.tags }}" data-alert="alert">
@@ -108,19 +173,16 @@
 
 <div class="container">
 <div class="row">
-<div class="col-md-9">
+<div class="col-md-9 middle">
     {% block main %}{% endblock %}
 </div>
-<div class="col-md-3 hidden-xs">
+<div class="col-md-3 right">
     {% block left_panel %}
     <div class="panel panel-default tree">{% page_menu "pages/menus/tree.html" %}</div>
     {% endblock %}
     <div class="panel panel-default">
     <div class="panel-body">
     {% block right_panel %}
-    {% ifinstalled mezzanine.twitter %}
-    {% include "twitter/tweets.html" %}
-    {% endifinstalled %}
     {% endblock %}
     <a class="twitter-timeline" href="https://twitter.com/mikiapp" data-widget-id="540156022870929410">Tweets by @mikiapp</a>
     </div>
@@ -135,18 +197,10 @@
 <div class="container">
 <div class="row">
 <div class="col-md-12">
-
-{% page_menu "pages/menus/footer.html" %}
-</div>
-</div>
-</div>
-<div class="container">
-<div class="row">
-<div class="col-md-12">
 <p class="site-info text-center" style="font-size: 16px; margin: 8px;">
     The Miki Beta. <br><br>
-    Made by <a href="/users/atai">Atai Kang</a>. Hosting by <a href="https://www.digitalocean.com/?refcode=1728cc989345" target="_blank" title="Referral link with $10 credit. Spent 1st $25 - provide us $25">Digital Ocean</a>.<br><br>
-    © Miki App 2013, 2014, 2015.<br><br>
+    Founded by <a href="/users/atai">Atai Kang</a> with <a href="http://octobertech.org/" target="_blank">OctoberTech.org</a> in 2014.<br><br>
+    Copyright © Miki EdTech 2015. All rights reserved.<br><br>
     <div class="text-center">
     <div class="g-plusone" data-href="http://www.themiki.com/"></div>
     <a href="https://twitter.com/share" class="twitter-share-button" data-url="http://www.themiki.com/" data-text="Check out @MikiApp - the world's first social micro encyclopedia..." data-hashtags="MikiApp">Tweet</a>
@@ -160,6 +214,17 @@
 </footer>
 
 
+
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!-- /#page-content-wrapper -->
+
+    </div>
+    <!-- /#wrapper -->
+
+
 <script>
 $(function () {
   $('[data-toggle="tooltip"]').tooltip()
@@ -170,11 +235,6 @@ $(function () {
 </script>
 
 <script>
-$(document).on('click','.navbar-collapse.in', function() {
-        $(this).collapse('hide');   }
-});
-</script>
-<script>
   (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
   (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
   m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
@@ -184,5 +244,14 @@ $(document).on('click','.navbar-collapse.in', function() {
   ga('send', 'pageview');
 
 </script>
+
+<!-- Menu Toggle Script -->
+    <script>
+    $("#menu-toggle").click(function(e) {
+        e.preventDefault();
+        $("#wrapper").toggleClass("toggled");
+    });
+    </script>
+{% editable_loader %}
 </body>
 </html>
