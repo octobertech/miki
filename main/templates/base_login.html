@@ -13,19 +13,18 @@
 <style></style>
 {% compress css %}
 <link rel="stylesheet" href="{{ STATIC_URL }}css/bootstrap.css">
-<link rel="stylesheet" href="{{ STATIC_URL }}css/bootstrap-theme.css">
 <link rel="stylesheet" href="{{ STATIC_URL }}css/mezzanine.css">
-<link rel="stylesheet" href="{{ STATIC_URL }}css/bootstrap2-responsive.css">
 <link rel="stylesheet" href="{{ STATIC_URL }}css/drum.css">
 {% endcompress %}
 
+<link href='http://fonts.googleapis.com/css?family=Open+Sans&subset=latin,cyrillic' rel='stylesheet' type='text/css'>
+<link href="//maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css" rel="stylesheet">
+
 {% compress js %}
-<script src="{{ STATIC_URL }}mezzanine/js/{{ settings.JQUERY_FILENAME }}"></script>
+<script src="{{ STATIC_URL }}mezzanine/js/jquery-1.11.2.min.js"></script>
 <script src="{{ STATIC_URL }}js/bootstrap.js"></script>
-<script src="{{ STATIC_URL }}js/bootstrap2-extras.js"></script>
 <script src="{{ STATIC_URL }}js/drum.js"></script>
 <script src="{{ STATIC_URL }}js/jquery.pjax.js"></script>
-
 {% endcompress %}
 
 {% block extra_head %}{% endblock %}
